@@ -1,35 +1,65 @@
-import matplotlib.image as img
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import mpl_toolkits.axisartist.angle_helper as angle_helper
+from matplotlib.projections import PolarAxes
+from matplotlib.transforms import Affine2D
+from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear, Axes
 
 
+def curvelinear_test2(fig):
+    """Polar projection, but in a rectangular box."""
+    # see demo_curvelinear_grid.py for details
+    tr_rotate = Affine2D().translate(90, 0)
+    tr_scale = Affine2D().scale(np.pi/180., 1.)
+    tr = tr_rotate + tr_scale + PolarAxes.PolarTransform()
+    
+    extreme_finder = angle_helper.ExtremeFinderCycle(20,
+                                                     20,
+                                                     lon_cycle=360,
+                                                     lat_cycle=None,
+                                                     lon_minmax=None,
+                                                     lat_minmax=(-np.inf,
+                                                                 np.inf),
+                                                     )
 
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+    grid_locator1 = angle_helper.LocatorDMS(8)
+    # tick_formatter1 = angle_helper.FormatterDMS()
 
-# Compute areas and colors
-N = 5
-r = 2 * np.random.rand(N)
-print(r)
-theta = 2 * np.pi * np.random.rand(N)
+    grid_helper = GridHelperCurveLinear(tr,
+                                        extreme_finder=extreme_finder,
+                                        grid_locator1=grid_locator1,
+                                        # tick_formatter1=tick_formatter1
+                                        )
 
-area = 200 * r**2
-colors = theta
-
-# fig = plt.figure()
-# axes_coords = [0, 0, 1, 1]
+    ax1 = fig.add_subplot(axes_class=HostAxes, grid_helper=grid_helper)
 
 
-# ax_polar = fig.add_axes(axes_coords, projection='polar', label="ax polar")
-# ax_polar.set_theta_zero_location('N')
-# c = ax_polar.scatter(theta, r, c=colors, s=area, cmap='hsv', alpha=0.75)
+    # Now creates floating axis
+    ax1.scatter(5, 5)
 
-# im = plt.imread('./images/top.png')
+    # floating axis whose first coordinate (theta) is fixed at 60
+    ax1.axis["ax"] = axis = ax1.new_floating_axis(0, 0)
+    axis.set_axis_direction("top")
+    axis.major_ticklabels.set_axis_direction("left")
+    ax1.axis["ax1"] = axis = ax1.new_floating_axis(0, 90)
+    axis.set_axis_direction("left")
+    axis.major_ticklabels.set_axis_direction("bottom")
+    # axis.label.set_text(r"$\theta = 60^{\circ}$")
+    # axis.label.set_visible(True)
+
+    # floating axis whose second coordinate (r) is fixed at 6
+    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 6)
+    axis.label.set_pad(10)
+    
+    # axis.label.set_text(r"$r = 1$")
+
+    ax1.set_aspect(1.)
+    ax1.set_xlim(-10, 10)
+    ax1.set_ylim(-10, 10)
+
+    ax1.grid(True)
 
 
-image = img.imread('./images/top.png')
-plt.imshow(image, interpolation='none', extent=(-15, 15, 10, -10))
-plt.show()
-
-
+fig = plt.figure()
+curvelinear_test2(fig)
 plt.show()
