@@ -1,65 +1,34 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import mpl_toolkits.axisartist.angle_helper as angle_helper
-from matplotlib.projections import PolarAxes
-from matplotlib.transforms import Affine2D
-from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear, Axes
 
 
-def curvelinear_test2(fig):
-    """Polar projection, but in a rectangular box."""
-    # see demo_curvelinear_grid.py for details
-    tr_rotate = Affine2D().translate(90, 0)
-    tr_scale = Affine2D().scale(np.pi/180., 1.)
-    tr = tr_rotate + tr_scale + PolarAxes.PolarTransform()
-    
-    extreme_finder = angle_helper.ExtremeFinderCycle(20,
-                                                     20,
-                                                     lon_cycle=360,
-                                                     lat_cycle=None,
-                                                     lon_minmax=None,
-                                                     lat_minmax=(-np.inf,
-                                                                 np.inf),
-                                                     )
+def draw_axis(max_range=10):
+    # initializing the figure
+    fig = plt.figure()
+    # setting the axis limits in [left, bottom, width, height]
+    xy_limit = (-max_range, max_range)
+    rect = [0.1, 0.1, 0.8, 0.8]
 
-    grid_locator1 = angle_helper.LocatorDMS(8)
-    # tick_formatter1 = angle_helper.FormatterDMS()
+    # the carthesian axis:
+    ax_carthesian = fig.add_axes(rect)
+    ax_carthesian.set_xlim(xy_limit)
+    ax_carthesian.set_ylim(xy_limit)
+    # the polar axis:
+    ax_polar = fig.add_axes(rect, polar=True, frameon=False)
+    ax_polar.set_theta_zero_location('N')
+    ax_polar.set_rmax(xy_limit[1])
+    ax_polar.grid(True)
 
-    grid_helper = GridHelperCurveLinear(tr,
-                                        extreme_finder=extreme_finder,
-                                        grid_locator1=grid_locator1,
-                                        # tick_formatter1=tick_formatter1
-                                        )
+    # plotting the line on the carthesian axis
+    # ax_carthesian.plot(line, 'b')
 
-    ax1 = fig.add_subplot(axes_class=HostAxes, grid_helper=grid_helper)
+    # the polar plot
+    # ax_polar.plot(theta, r, color='r', linewidth=3)
+    return ax_carthesian, ax_polar
 
 
-    # Now creates floating axis
-    ax1.scatter(5, 5)
+ax_carthesian, ax_polar = draw_axis(1000)
+ax_carthesian.plot([50, 50, -50, -50, -150, -150, -50, -50],
+                   [-150, 150, 150, 20, 20, -20, -20, -150])
 
-    # floating axis whose first coordinate (theta) is fixed at 60
-    ax1.axis["ax"] = axis = ax1.new_floating_axis(0, 0)
-    axis.set_axis_direction("top")
-    axis.major_ticklabels.set_axis_direction("left")
-    ax1.axis["ax1"] = axis = ax1.new_floating_axis(0, 90)
-    axis.set_axis_direction("left")
-    axis.major_ticklabels.set_axis_direction("bottom")
-    # axis.label.set_text(r"$\theta = 60^{\circ}$")
-    # axis.label.set_visible(True)
-
-    # floating axis whose second coordinate (r) is fixed at 6
-    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 6)
-    axis.label.set_pad(10)
-    
-    # axis.label.set_text(r"$r = 1$")
-
-    ax1.set_aspect(1.)
-    ax1.set_xlim(-10, 10)
-    ax1.set_ylim(-10, 10)
-
-    ax1.grid(True)
-
-
-fig = plt.figure()
-curvelinear_test2(fig)
 plt.show()
