@@ -48,7 +48,7 @@ def curvelinear_test2(fig, rayon_max = 1000):
     # axis.label.set_visible(True)
 
     # floating axis whose second coordinate (r) is fixed at 6
-    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 20)
+    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 150)
     axis.label.set_pad(10)
     
     # axis.label.set_text(r"$r = 1$")

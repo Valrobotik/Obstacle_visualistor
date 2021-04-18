@@ -37,6 +37,8 @@ class Carte_detecteur_obstacle(Communication_Gcode):
                     self.distance_capteur[capteur] = distance
                 
                     return distance
+            
+            return 0
 
 
 if __name__ == "__main__":

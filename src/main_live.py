@@ -8,7 +8,17 @@ import numpy as np
 
 import time
 
+def update_quiver(num, Q, X, Y):
+    """updates the horizontal and vertical vector components by a
+    fixed increment on each frame
+    """
 
+    U = np.cos(X + num*0.1)
+    V = np.sin(Y + num*0.1)
+
+    Q.set_UVC(U,V)
+
+    return Q,
 def get_robot_points():
     robot_x = [-150, 150, 150, 20, 20, -20, -20, -150]
     robot_y = [50, 50, -50, -50, -150, -150, -50, -50]
@@ -32,34 +42,54 @@ carte = Carte_detecteur_obstacle("COM7", 9600)
 fig = plt.figure()
 ax = curvelinear_test2(fig, 500)
 
+# plot robot
+ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
+
+sensor_plots = []
+sensor_obs_plots = []
+sensor_dir_plots = []
+for sensor in dist_sensors:
+    sensor_pose = sensor.get_sensor_pose()
+    tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ko')
+    sensor_plots.append(tmp_plot)
+
+    # tmp_plot, = ax.plot([sensor_pose[0], sensor_pose[0]+ 10*np.cos(sensor_pose[2])], [sensor_pose[1], sensor_pose[1] + sensor_pose[1] + 10*np.sin(sensor_pose[2])], 'k')
+    tmp_plot, = ax.plot([],[], 'k')
+    sensor_dir_plots.append(tmp_plot)
+
+
+    sensor_obs = sensor.get_obstacle_pose()
+    tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ro')
+    sensor_obs_plots.append(tmp_plot)
+
 
 ####################################################
 while True:
     dist_sensor.set_dist(carte.get_distance(0))
 
-    time.sleep(0.2)
-
 
     ####################
     #affichage
-    ax.cla()
-
-    # plot robot
-    ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
 
     #plot sensors
-    for sensor in dist_sensors:
+    for sensor, sensor_plot, sensor_obs_plot, sensor_dir_plot in zip(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
         # sensor
         sensor_pose = sensor.get_sensor_pose()
-        ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
-            # ax.plot(th, r, 'ro')
-            # a = np.deg2rad(theta+90)
-        ax.quiver(sensor_pose[0], sensor_pose[1], np.sin(-sensor_pose[2]), np.cos(-sensor_pose[2]))
+        # ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
+        sensor_plot.set_data(sensor_pose[0], sensor_pose[1])
+        
+        #tracé de la direction du capteur
+        sensor_dir_plot.set_data([sensor_pose[0], sensor_pose[0]+ 50*np.sin(-sensor_pose[2])], [sensor_pose[1], sensor_pose[1] + 50*np.cos(-sensor_pose[2])])        
 
         # obstacle
         sensor_obstacle_pose = sensor.get_obstacle_pose()     
-        ax.plot(sensor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
+        # ax.plot(sinsor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
+        sensor_obs_plot.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
+        
+        #tracé du rayon capteur-obstacle
+        # sensor_dir_plot.set_data([sensor_pose[0], sensor_obstacle_pose[0]], [sensor_pose[1], sensor_obstacle_pose[1]])        
+        # sensor_dir_plot.set_data([sensor_pose[0], sensor_obstacle_pose[0]], [sensor_pose[1], sensor_obstacle_pose[1]])        
     
-    plt.pause(0.1)
+    plt.pause(0.01)
 
 plt.show()
