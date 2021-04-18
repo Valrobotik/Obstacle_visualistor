@@ -12,8 +12,6 @@ def donnee_capteurs(fichier_donnee):
     return data
     
 
-
-
 if __name__ == "__main__":
     data = donnee_capteurs('./src/positions.json')
 

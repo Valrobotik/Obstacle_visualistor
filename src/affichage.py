@@ -61,22 +61,22 @@ def curvelinear_test2(fig, rayon_max = 1000):
     return ax1
 
 
-def draw_robot_polar(ax):
-    """Affichage du robot sur le graphe
-
-        Args:
-            ax (matplotlib ax): ax matplotlib
-        """
-    robot_x = [50, 50, -50, -50, -150, -150, -50, -50]
-    robot_y = [-150, 150, 150, 20, 20, -20, -20, -150]
-    robot_x += [robot_x[0]]
-    robot_y += [robot_y[0]]
-
-    ax.plot(robot_y, robot_x)
-
 
 
 if __name__ == "__main__":
+    def draw_robot_polar(ax):
+        """Affichage du robot sur le graphe
+
+            Args:
+                ax (matplotlib ax): ax matplotlib
+            """
+        robot_x = [-150, 150, 150, 20, 20, -20, -20, -150]
+        robot_y = [50, 50, -50, -50, -150, -150, -50, -50]
+        robot_x += [robot_x[0]]
+        robot_y += [robot_y[0]]
+
+        ax.plot(robot_x, robot_y)
+
     fig = plt.figure()
     ax1 = curvelinear_test2(fig)
     draw_robot_polar(ax1)
