@@ -6,7 +6,7 @@ from matplotlib.transforms import Affine2D
 from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear, Axes
 
 
-def curvelinear_test2(fig):
+def curvelinear_test2(fig, rayon_max = 1000):
     """Polar projection, but in a rectangular box."""
     # see demo_curvelinear_grid.py for details
     tr_rotate = Affine2D().translate(90, 0)
@@ -35,7 +35,7 @@ def curvelinear_test2(fig):
 
 
     # Now creates floating axis
-    ax1.scatter(5, 5)
+    # ax1.scatter(5, 5)
 
     # floating axis whose first coordinate (theta) is fixed at 60
     ax1.axis["ax"] = axis = ax1.new_floating_axis(0, 0)
@@ -48,18 +48,38 @@ def curvelinear_test2(fig):
     # axis.label.set_visible(True)
 
     # floating axis whose second coordinate (r) is fixed at 6
-    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 6)
+    ax1.axis["lon"] = axis = ax1.new_floating_axis(1, 20)
     axis.label.set_pad(10)
     
     # axis.label.set_text(r"$r = 1$")
 
     ax1.set_aspect(1.)
-    ax1.set_xlim(-10, 10)
-    ax1.set_ylim(-10, 10)
+    ax1.set_xlim(-rayon_max, rayon_max)
+    ax1.set_ylim(-rayon_max, rayon_max)
 
     ax1.grid(True)
+    return ax1
 
 
-fig = plt.figure()
-curvelinear_test2(fig)
-plt.show()
+def draw_robot_polar(ax):
+    """Affichage du robot sur le graphe
+
+        Args:
+            ax (matplotlib ax): ax matplotlib
+        """
+    robot_x = [50, 50, -50, -50, -150, -150, -50, -50]
+    robot_y = [-150, 150, 150, 20, 20, -20, -20, -150]
+    robot_x += [robot_x[0]]
+    robot_y += [robot_y[0]]
+
+    ax.plot(robot_y, robot_x)
+
+
+
+if __name__ == "__main__":
+    fig = plt.figure()
+    ax1 = curvelinear_test2(fig)
+    draw_robot_polar(ax1)
+
+
+    plt.show()
