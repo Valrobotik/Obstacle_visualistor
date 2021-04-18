@@ -41,9 +41,9 @@ def curvelinear_test2(fig, rayon_max = 1000):
     ax1.axis["ax"] = axis = ax1.new_floating_axis(0, 0)
     axis.set_axis_direction("top")
     axis.major_ticklabels.set_axis_direction("left")
-    ax1.axis["ax1"] = axis = ax1.new_floating_axis(0, 90)
+    ax1.axis["ax1"] = axis = ax1.new_floating_axis(0, -90)
     axis.set_axis_direction("left")
-    axis.major_ticklabels.set_axis_direction("bottom")
+    axis.major_ticklabels.set_axis_direction("top")
     # axis.label.set_text(r"$\theta = 60^{\circ}$")
     # axis.label.set_visible(True)
 

@@ -14,9 +14,10 @@ def get_robot_points():
 
 
 # initialisation des capteurs
-dist_senor = DistSensor(30, 10, 0.0)
-dist_senor2 = DistSensor(-30, -30, np.deg2rad(90))
+dist_senor = DistSensor(20, 50, np.deg2rad(-30))
+dist_senor2 = DistSensor(-30, -50, np.deg2rad(-180))
 dist_sensors = [dist_senor, dist_senor2]
+# dist_sensors = [dist_senor]
 
 # set des valeurs de distances
 dist_senor.set_dist(50)
@@ -26,7 +27,7 @@ dist_senor2.set_dist(50)
 ####################
 #affichage
 fig = plt.figure()
-ax = curvelinear_test2(fig, 100)
+ax = curvelinear_test2(fig, 500)
 
 # plot robot
 ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
@@ -35,14 +36,14 @@ ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
 for sensor in dist_sensors:
     # sensor
     sensor_pose = sensor.get_sensor_pose()
-    ax.plot(-sensor_pose[0], sensor_pose[1], 'ro')
+    ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
         # ax.plot(th, r, 'ro')
         # a = np.deg2rad(theta+90)
-        # ax.quiver(th, r, np.cos(a), np.sin(a))
+    ax.quiver(sensor_pose[0], sensor_pose[1], np.sin(-sensor_pose[2]), np.cos(-sensor_pose[2]))
 
     # obstacle
     sensor_obstacle_pose = sensor.get_obstacle_pose()     
-    ax.plot(sensor_obstacle_pose[0],sensor_obstacle_pose[1], 'bo')
+    ax.plot(sensor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
 
 
 

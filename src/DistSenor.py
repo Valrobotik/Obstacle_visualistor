@@ -50,11 +50,11 @@ class DistSensor(object):
         if self.distance == None:
             return [0], [0]
 
-        y = self.distance*np.cos(self.position['t'])
-        x = self.distance*np.sin(self.position['t'])
+        y = self.distance*np.cos(-self.position['t'])
+        x = self.distance*np.sin(-self.position['t'])
 
         # ajout du vecteur obstacle au vecteur capteur
-        obstacle_x = -(self.position['x'] + x)
+        obstacle_x = self.position['x'] + x
         obstacle_y = self.position['y'] + y
         
         return [obstacle_x], [obstacle_y]
