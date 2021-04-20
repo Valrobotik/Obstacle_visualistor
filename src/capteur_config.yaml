@@ -4,8 +4,20 @@ ultrason1:
   y: 50 # position suivant y en mm
   theta: -30 #angle en degrès
 
+ultrason4:
+  type: ultrason
+  x: -20 # position suivant x en mm
+  y: 50 # position suivant y en mm
+  theta: 30 #angle en degrès
+
 ultrason2:
   type: ultrason
   x: -30 # position suivant x en mm
   y: -50 # position suivant y en mm
   theta: -190 #angle en degrès
+
+ultrason3:
+  type: ultrason
+  x: +30 # position suivant x en mm
+  y: -50 # position suivant y en mm
+  theta: 190 #angle en degrès
