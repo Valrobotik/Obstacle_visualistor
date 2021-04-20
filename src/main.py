@@ -50,7 +50,7 @@ def data_gen():
     data = next(index)
     for sensor in dist_sensors:
         new_dist = 200+200*np.cos(0.1*data)
-        sensor.set_dist(new_dist)
+        sensor.set_dist(new_dist, 0)
         yield data
 
 
@@ -68,8 +68,7 @@ def run(data):
         # obstacle
         sensor_obstacle_pose = sensor.get_obstacle_pose()
         # ax.plot(sinsor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
-        sensor_obs_plot.set_data(
-            sensor_obstacle_pose[0], sensor_obstacle_pose[1])
+        sensor_obs_plot.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
 
 
 
