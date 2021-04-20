@@ -1,9 +1,10 @@
 from DistSenor import DistSensor
 from affichage import curvelinear_plot, get_robot_points
 
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-
+from itertools import count
 
 
 # initialisation des capteurs
@@ -12,35 +13,68 @@ dist_senor2 = DistSensor(-30, -50, np.deg2rad(-180))
 dist_sensors = [dist_senor, dist_senor2]
 # dist_sensors = [dist_senor]
 
-# set des valeurs de distances
-dist_senor.set_dist(50)
-dist_senor2.set_dist(50)
+
 
 
 ####################
 #affichage
 fig, ax = curvelinear_plot(500)
 
-# plot robot
-ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
 
-#plot sensors
-for sensor in dist_sensors:
-    # sensor
-    sensor_pose = sensor.get_sensor_pose()
-    ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
-        # ax.plot(th, r, 'ro')
-        # a = np.deg2rad(theta+90)
-    ax.quiver(sensor_pose[0], sensor_pose[1], np.sin(-sensor_pose[2]), np.cos(-sensor_pose[2]))
+sensor_plots = []
+sensor_obs_plots = []
+sensor_dir_plots = []
 
-    # obstacle
-    sensor_obstacle_pose = sensor.get_obstacle_pose()     
-    ax.plot(sensor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
+def init():
+    robot = get_robot_points()
+    ax.plot(robot[0], robot[1])
+    for sensor in dist_sensors:
+        sensor_pose = sensor.get_sensor_pose()
+        tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ko')
+        sensor_plots.append(tmp_plot)
+
+        # tmp_plot, = ax.plot([sensor_pose[0], sensor_pose[0]+ 10*np.cos(sensor_pose[2])], [sensor_pose[1], sensor_pose[1] + sensor_pose[1] + 10*np.sin(sensor_pose[2])], 'k')
+        tmp_plot, = ax.plot([], [], 'k')
+        sensor_dir_plots.append(tmp_plot)
+
+        sensor_obs = sensor.get_obstacle_pose()
+        tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ro')
+        sensor_obs_plots.append(tmp_plot)
+
+    return sensor_plots, sensor_dir_plots, sensor_obs_plots
+
+
+index = count()
+
+def data_gen():
+    data = next(index)
+    for sensor in dist_sensors:
+        new_dist = 200+200*np.cos(0.1*data)
+        sensor.set_dist(new_dist)
+        yield data
+
+
+def run(data):
+    for sensor, sensor_plot, sensor_obs_plot, sensor_dir_plot in zip(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
+        # sensor
+        sensor_pose = sensor.get_sensor_pose()
+        # ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
+        sensor_plot.set_data(sensor_pose[0], sensor_pose[1])
+
+        #tracé de la direction du capteur
+        sensor_dir_plot.set_data([sensor_pose[0], sensor_pose[0] + 50*np.sin(-sensor_pose[2])], [
+                                 sensor_pose[1], sensor_pose[1] + 50*np.cos(-sensor_pose[2])])
+
+        # obstacle
+        sensor_obstacle_pose = sensor.get_obstacle_pose()
+        # ax.plot(sinsor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
+        sensor_obs_plot.set_data(
+            sensor_obstacle_pose[0], sensor_obstacle_pose[1])
 
 
 
-
-
-# ax.plot(robot_x, robot_y)
-
+init()
+ani = animation.FuncAnimation(fig, run, data_gen, interval=1)
 plt.show()
+
+

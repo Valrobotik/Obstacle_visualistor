@@ -40,10 +40,11 @@ class DistSensor(object):
             dist (float): distance en mm de l'obstacle par rapport au capteur
         """
         self.distance = dist
+        return dist
 
     def get_obstacle_pose(self):
         """[summary]
-
+        #TODO à faire en matrice
         Returns:
             [float, float]: position [[x], [y]] in mm of the obstacle in the robot space (cartesian coordinate)
         """
