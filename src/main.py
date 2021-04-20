@@ -1,143 +1,85 @@
+from DistSenor import DistSensor
+from affichage import curvelinear_plot, get_robot_points
+from yaml_utils import yaml_data_import
+
+import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+import numpy as np
+from itertools import count
+
+
+# initialisation des capteurs
+dist_sensors = []
+nom_fichier = './src/capteur_config.yaml'
+liste_capteur = yaml_data_import(nom_fichier)
+
+# Ajout des capteurs en fonction du fichier capteur_config.yaml
+for capteur, data in liste_capteur:
+    dist_sensors.append(DistSensor(
+        data['x'], data['y'], np.deg2rad(data['theta'])))
 
 
 
-class DistSensor(object):
-    """
-    capteur de distance
-    """
-    def __init__(self, x=0.0, y=0.0, t=0.0) -> None:
-        """[summary]
-
-        Args:
-            x (float): position en x en mm du capteur
-            y (float): position en y en mm du capteur
-            t (float): angle en radian du capteur par rapport à l'axe x du robot (devant)
-        """
-        self.position = (x, y, t)
-
-    def set_sensor_postion(self, x, y, t):
-        """[summary]
-
-        Args:
-            x (float): position en x en mm du capteur
-            y (float): position en y en mm du capteur
-            t (float): angle en radian du capteur par rapport à l'axe x du robot (devant)
-        """        
-        self.position = (x, y, t)
 
 
-    def get_obstacle_pose(self):
-        """[summary]
-
-        Returns:
-            [float, float]: position [x, y] in mm of the obstacle in the robot space
-        """
-        #TODO
-        pass
-        
-    def set_dist(self, dist):
-        """[summary]
-
-        Args:
-            dist (float): distance en mm de l'obstacle par rapport au capteur
-        """
-        #TODO
-        pass
+####################
+#affichage
+fig, ax = curvelinear_plot(500)
 
 
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.patches import Rectangle
+sensor_plots = []
+sensor_obs_plots = []
+sensor_dir_plots = []
+
+def init():
+    robot = get_robot_points()
+    ax.plot(robot[0], robot[1])
+    for sensor in dist_sensors:
+        sensor_pose = sensor.get_sensor_pose()
+        tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ko')
+        sensor_plots.append(tmp_plot)
+
+        # tmp_plot, = ax.plot([sensor_pose[0], sensor_pose[0]+ 10*np.cos(sensor_pose[2])], [sensor_pose[1], sensor_pose[1] + sensor_pose[1] + 10*np.sin(sensor_pose[2])], 'k')
+        tmp_plot, = ax.plot([], [], 'k')
+        sensor_dir_plots.append(tmp_plot)
+
+        sensor_obs = sensor.get_obstacle_pose()
+        tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ro')
+        sensor_obs_plots.append(tmp_plot)
+
+    return sensor_plots, sensor_dir_plots, sensor_obs_plots
 
 
-    def conversion2polaire(x, y):
-        """Conversion des coordinnées cartésiennes vers les coordonnées polaires
+index = count()
 
-        Args:
-            x (float): position cartésienne en x en mm
-            y (float): position cartésienne en y en mm
-
-        Returns:
-            [float, float]: norme r en mm et angle en radian
-        """
-        r = np.sqrt(np.power(x, 2) + np.power(y, 2))
-        theta = np.arctan2(y, x)
-
-        return r, theta
+def data_gen():
+    data = next(index)
+    for sensor in dist_sensors:
+        new_dist = 200+200*np.cos(0.1*data)
+        sensor.set_dist(new_dist, 0)
+        yield data
 
 
-    def draw_sensor(ax, x, y, theta):
-        """Dispose les capteurs sur le graphe. 
+def run(data):
+    for sensor, sensor_plot, sensor_obs_plot, sensor_dir_plot in zip(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
+        # sensor
+        sensor_pose = sensor.get_sensor_pose()
+        # ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
+        sensor_plot.set_data(sensor_pose[0], sensor_pose[1])
 
-        Args:
-            ax (matplotlib ax): axe matplotlib
-            x (float): position cartésienne x en mm du capteur
-            y (float): position cartérsienne y en mm du capteur
-            theta (float): direction theta en radian du capteur
-        """
-        r, th = conversion2polaire(x, y)
-        ax.plot(th, r, 'ro')
-        a = np.deg2rad(theta+90)
-        ax.quiver(th, r, np.cos(a), np.sin(a))
+        #tracé de la direction du capteur
+        sensor_dir_plot.set_data([sensor_pose[0], sensor_pose[0] + 50*np.sin(-sensor_pose[2])], [
+                                 sensor_pose[1], sensor_pose[1] + 50*np.cos(-sensor_pose[2])])
 
-    def draw_robot_polar(ax):
-        """Affichage du robot sur le graphe
-
-        Args:
-            ax (matplotlib ax): ax matplotlib
-        """
-        robot_x = [50, 50, -50, -50, -150, -150, -50, -50]
-        robot_y = [-150, 150, 150, 20, 20, -20, -20, -150]
-
-        robot_x += [robot_x[0]]
-        robot_y += [robot_y[0]]
-
-        r, th = conversion2polaire(robot_x, robot_y)
-        ax.plot(th, r)
-
-    def draw_obstacle_polar(ax, distance, positionC_x, positionC_y, angleC):
-        """Affichage de l'obstacle sur le graphe
-
-        Args:
-            ax (ax matplotlib): matplotlib axe
-            distance (float): distance mesurée entre le capteur est l'obstacle
-            positionC_x (float): position cartésienne du capteur en mm
-            positionC_y (float): position cartésienne du capteur en mm
-            angleC (float): angle du capteur en rad
-        """
-        # calcul du vecteur capteur->osbstacle en cartesien
-        y = distance*np.sin(angleC)
-        x = distance*np.cos(angleC)
-
-        # ajout du vecteur obstacle au vecteur capteur
-        X = positionC_x + x
-        Y = positionC_y + y
-
-        r, theta = conversion2polaire(X, Y)
-
-        ax.plot(theta, r, 'ro')
+        # obstacle
+        sensor_obstacle_pose = sensor.get_obstacle_pose()
+        # ax.plot(sinsor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
+        sensor_obs_plot.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
 
 
-    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
-    ax.set_theta_zero_location('N')
-    # ax.plot(0, 0, 'ro')
-    draw_robot_polar(ax)
+
+init()
+ani = animation.FuncAnimation(fig, run, data_gen, interval=1)
+plt.show()
 
 
-    draw_sensor(ax, 50, 100, 00)
-    draw_obstacle_polar(ax, 550, 50, 100, 0)
-
-    ax.grid(True)
-    ax.set_rmax(1000)
-    ax.set_rmin(0)
-    plt.show()
-
-
-    # sensor1 = Sensor(5, 10, 0)
-    # sensor1.set_dist(Truc du serial)
-    # obstacle_sensor1 = sensor1.get_obstacle_pos()
-
-#TODO
-# class sensor 
-# fonction affichage
