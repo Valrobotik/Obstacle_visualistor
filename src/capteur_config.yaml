@@ -1,11 +1,11 @@
 ultrason1:
   type: ultrason
-  x: 100 # position suivant x en mm
-  y: 100 # position suivant y en mm
-  angle: 50 #angle en degrès
+  x: 20 # position suivant x en mm
+  y: 50 # position suivant y en mm
+  angle: -30 #angle en degrès
 
 ultrason2:
   type: ultrason
-  x: -100
-  y: 100
-  angle: 160
+  x: -30
+  y: -50
+  angle: -190

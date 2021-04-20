@@ -1,5 +1,6 @@
 from DistSenor import DistSensor
 from affichage import curvelinear_plot, get_robot_points
+from yaml_utils import yaml_data_import
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -8,10 +9,14 @@ from itertools import count
 
 
 # initialisation des capteurs
-dist_senor = DistSensor(20, 50, np.deg2rad(-30))
-dist_senor2 = DistSensor(-30, -50, np.deg2rad(-190))
-dist_sensors = [dist_senor, dist_senor2]
-# dist_sensors = [dist_senor]
+dist_sensors = []
+nom_fichier = './src/capteur_config.yaml'
+liste_capteur = yaml_data_import(nom_fichier)
+
+# Ajout des capteurs en fonction du fichier capteur_config.yaml
+for capteur, data in liste_capteur:
+    dist_sensors.append(DistSensor(data['x'], data['y'], np.deg2rad(data['angle'])))
+
 
 
 
