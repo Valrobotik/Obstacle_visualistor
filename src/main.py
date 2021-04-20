@@ -57,10 +57,9 @@ def data_gen():
     for sensor in dist_sensors:
         new_dist = 200+200*np.cos(0.1*data)
         sensor.set_dist(new_dist, 0)
-        yield data
 
 
-def run(data):
+def run():
     for sensor, sensor_plot, sensor_obs_plot, sensor_dir_plot in zip(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
         # sensor
         sensor_pose = sensor.get_sensor_pose()
@@ -77,9 +76,27 @@ def run(data):
         sensor_obs_plot.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
 
 
+# import sys
+
+def on_close(event):
+    global quit
+    print('Closed Figure!')
+    quit = 1
+
+
+fig.canvas.mpl_connect('close_event', on_close)
 
 init()
-ani = animation.FuncAnimation(fig, run, data_gen, interval=1)
-plt.show()
+quit = 0
+while not(quit):
+    # Event handel for quit
+    if quit:
+        plt.close('all')
+        break
+
+    data_gen()
+    run()
+    plt.pause(0.1)
+
 
 
