@@ -16,7 +16,8 @@ if __name__ == "__main__":
     liste_capteur = yaml_data_import(nom_fichier)
     
     for capteur, data in liste_capteur:
-        print(data['type'], " -- ", data['x'], " -- ", data['y'])
+        print(data['type'], " -- ", data['x'],
+              " -- ", data['y'], " -- ", data['angle'])
     
 
 
