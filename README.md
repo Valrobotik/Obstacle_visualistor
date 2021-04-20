@@ -1,7 +1,3 @@
-<p align="center">
-<img width="30%" src="images\logo_valrob.png" alt="Logo Valrob">
-</p>
-
 # Obstacle Visualisator
 
 Obstacle visualisator permet placer les capteurs sur le robot et de voir en temps réels les obstacles sur la carte.
@@ -26,7 +22,7 @@ On recherche alors à placer et à utiliser facilement les capteurs du robot.
 
 On positionne les axes du robot et du capteur suivant le schéma ci-dessous :
 <p align="center">
-<img width="100%" src="images\Repère_robot_capteur.png" alt="Positionnement des axes du robot">
+<img width="75%" src="images\Repère_robot_capteur.png" alt="Positionnement des axes du robot">
 </p>
 
 
@@ -63,8 +59,13 @@ Il existe ensuite deux programmes :
    ```
 
 ## Auteurs
-S6ril & Starfunx
 
+[S6ril](https://github.com/S6ril) 
+[Starfunx](https://github.com/Starfunx)
+
+<p align="center">
+<img width="10%" src="images\logo_valrob.png" alt="Logo Valrob">
+</p>
 
 
 
