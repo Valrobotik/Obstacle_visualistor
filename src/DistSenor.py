@@ -47,6 +47,7 @@ class DistSensor(object):
         Returns:
             [np.array]: position in mm of the obstacle in the robot space (cartesian coordinate)
         """
+        obstacle_pose = np.array([self.distance, 0])
         if self.distance == None:
             return np.zeros(2)
 
@@ -54,8 +55,8 @@ class DistSensor(object):
         # x (obstacle->capteur)/robot = - distance * sin(theta)
         # y (obstacle->capteur)/robot = distance * cos(theta)
         theta = self.position[2]
-        repere_robot_capteur = np.array([-np.sin(theta), 
-                                          np.cos(theta)])
+        repere_robot_capteur = np.array([[-np.sin(theta),  np.cos(theta)],
+                                         [-np.cos(theta), -np.sin(theta)]])
 
         # Déplacement de ce rèpere au centre du robot
         # x (capteur ->centre)/robot
@@ -63,4 +64,4 @@ class DistSensor(object):
         repere_robot_centre = np.array([self.position[0], self.position[1]])
         
         # Projection dans le repère du robot au point du capteur puis translation vers le centre du robot
-        return self.distance * repere_robot_capteur + repere_robot_centre
+        return np.dot(obstacle_pose, repere_robot_capteur) + repere_robot_centre
