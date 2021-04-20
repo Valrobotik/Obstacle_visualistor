@@ -1,5 +1,5 @@
 from DistSenor import DistSensor
-from affichage import curvelinear_test2
+from affichage import curvelinear_plot
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,7 +27,7 @@ dist_senor2.set_dist(50)
 ####################
 #affichage
 fig = plt.figure()
-ax = curvelinear_test2(fig, 500)
+ax = curvelinear_plot(fig, 500)
 
 # plot robot
 ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')

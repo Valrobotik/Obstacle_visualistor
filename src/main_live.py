@@ -1,6 +1,6 @@
 
 from DistSenor import DistSensor
-from affichage import curvelinear_test2
+from affichage import curvelinear_plot
 from capteur import Carte_detecteur_obstacle
 
 import matplotlib.pyplot as plt
@@ -40,7 +40,7 @@ carte = Carte_detecteur_obstacle("COM7", 9600)
 
 #init afffichage
 fig = plt.figure()
-ax = curvelinear_test2(fig, 500)
+ax = curvelinear_plot(fig, 500)
 
 # plot robot
 ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
