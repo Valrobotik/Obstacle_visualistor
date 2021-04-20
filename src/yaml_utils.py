@@ -17,7 +17,7 @@ if __name__ == "__main__":
     
     for capteur, data in liste_capteur:
         print(data['type'], " -- ", data['x'],
-              " -- ", data['y'], " -- ", data['angle'])
+              " -- ", data['y'], " -- ", data['theta'])
     
 
 

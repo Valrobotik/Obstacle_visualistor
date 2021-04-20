@@ -15,7 +15,8 @@ liste_capteur = yaml_data_import(nom_fichier)
 
 # Ajout des capteurs en fonction du fichier capteur_config.yaml
 for capteur, data in liste_capteur:
-    dist_sensors.append(DistSensor(data['x'], data['y'], np.deg2rad(data['angle'])))
+    dist_sensors.append(DistSensor(
+        data['x'], data['y'], np.deg2rad(data['theta'])))
 
 
 
