@@ -7,10 +7,11 @@ Obstacle visualisator permet placer les capteurs sur le robot et de voir en temp
 
 Ici il est simuler deux capteurs avec le robot au centre.
 
-- [Obstacle Visualisator](#obstacle-visualisator)
-  * [Contexte](#contexte)
-  * [Utilisation](#utilisation)
-  * [Auteurs](#auteurs)
+## Sommaire
+
+- [Contexte](#contexte)
+- [Utilisation](#utilisation)
+- [Auteurs](#auteurs)
 
 
 
@@ -60,8 +61,25 @@ Il existe ensuite deux programmes :
 
 ## Auteurs
 
-[S6ril](https://github.com/S6ril) 
-[Starfunx](https://github.com/Starfunx)
+ <table style="width:100%" >
+  <tr>
+    <th>
+    <a href="https://github.com/S6ril/">
+      <img width=30% src="https://avatars.githubusercontent.com/u/58038125?v=4" />
+    </a>
+    </th>
+    <th>
+    <a href="https://github.com/Starfunx">
+      <img width=30% src="https://avatars.githubusercontent.com/u/7883804?v=4" />
+    </a>
+    </th>
+  </tr>
+  <tr>
+    <th>S6ril</td>
+    <th>Starfunx</td>
+  </tr>
+</table> 
+
 
 <p align="center">
 <img width="10%" src="images\logo_valrob.png" alt="Logo Valrob">
