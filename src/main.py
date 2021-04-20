@@ -9,7 +9,7 @@ from itertools import count
 
 # initialisation des capteurs
 dist_senor = DistSensor(20, 50, np.deg2rad(-30))
-dist_senor2 = DistSensor(-30, -50, np.deg2rad(-180))
+dist_senor2 = DistSensor(-30, -50, np.deg2rad(-190))
 dist_sensors = [dist_senor, dist_senor2]
 # dist_sensors = [dist_senor]
 
