@@ -6,7 +6,7 @@ from matplotlib.transforms import Affine2D
 from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear, Axes
 
 
-def curvelinear_plot(fig, rayon_max = 1000):
+def curvelinear_plot(rayon_max = 1000):
     """Polar projection, but in a rectangular box."""
     # see demo_curvelinear_grid.py for details
     tr_rotate = Affine2D().translate(90, 0)
@@ -31,6 +31,7 @@ def curvelinear_plot(fig, rayon_max = 1000):
                                         # tick_formatter1=tick_formatter1
                                         )
 
+    fig = plt.figure()
     ax1 = fig.add_subplot(axes_class=HostAxes, grid_helper=grid_helper)
 
 
@@ -58,7 +59,7 @@ def curvelinear_plot(fig, rayon_max = 1000):
     ax1.set_ylim(-rayon_max, rayon_max)
 
     ax1.grid(True)
-    return ax1
+    return fig, ax1
 
 
 def get_robot_points():
@@ -81,8 +82,7 @@ if __name__ == "__main__":
 
         ax.plot(robot[0], robot[1])
 
-    fig = plt.figure()
-    ax1 = curvelinear_plot(fig)
+    fig, ax1 = curvelinear_plot()
     draw_robot(ax1)
 
 

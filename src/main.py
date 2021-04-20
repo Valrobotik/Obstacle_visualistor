@@ -1,16 +1,9 @@
 from DistSenor import DistSensor
-from affichage import curvelinear_plot
+from affichage import curvelinear_plot, get_robot_points
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-def get_robot_points():
-    robot_x = [-150, 150, 150, 20, 20, -20, -20, -150]
-    robot_y = [50, 50, -50, -50, -150, -150, -50, -50]
-    robot_x += [robot_x[0]]
-    robot_y += [robot_y[0]]
-    return [robot_x, robot_y]
 
 
 # initialisation des capteurs
@@ -26,8 +19,7 @@ dist_senor2.set_dist(50)
 
 ####################
 #affichage
-fig = plt.figure()
-ax = curvelinear_plot(fig, 500)
+fig, ax = curvelinear_plot(500)
 
 # plot robot
 ax.plot(get_robot_points()[0], get_robot_points()[1], 'b')
