@@ -1,0 +1,9 @@
+ultrason1:
+  type: ultrason
+  x: 100
+  y: 100
+
+ultrason2:
+  type: ultrason
+  x: -100
+  y: 100
