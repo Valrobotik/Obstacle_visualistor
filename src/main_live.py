@@ -1,7 +1,7 @@
 
-from DistSenor import DistSensor
+from robot_package.DistSenor import DistSensor
 from affichage import curvelinear_plot
-from capteur import Carte_detecteur_obstacle
+from sensor_board.CarteDetecteurObstacle import CarteDetecteurObstacle
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,7 +36,7 @@ dist_sensor2 = DistSensor(-30, -50, np.deg2rad(-180))
 dist_sensors = [dist_sensor]
 
 # initialisation communication avec carte d'obstacles
-carte = Carte_detecteur_obstacle("COM7", 9600)
+carte = CarteDetecteurObstacle("COM7", 9600)
 
 #init afffichage
 fig = plt.figure()

@@ -1,6 +1,6 @@
-from DistSenor import DistSensor
-from affichage import curvelinear_plot, get_robot_points
-from yaml_utils import yaml_data_import
+from robot_package.DistSenor import DistSensor
+from utils.curvelinear_plot import curvelinear_plot, get_robot_points
+from utils.yaml_utils import yaml_data_import
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt

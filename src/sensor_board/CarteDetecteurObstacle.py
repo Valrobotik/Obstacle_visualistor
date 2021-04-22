@@ -1,9 +1,9 @@
 
 
-from Class_Serial import Communication_Gcode
+from sensor_board.CommunicationGcode import CommunicationGcode
 
 
-class Carte_detecteur_obstacle(Communication_Gcode):
+class CarteDetecteurObstacle(CommunicationGcode):
     """Api for using the robot.
 
     Args:
@@ -11,7 +11,7 @@ class Carte_detecteur_obstacle(Communication_Gcode):
     """
 
     def __init__(self, portserial, bauderate) -> None:
-        Communication_Gcode.__init__(self, portserial, bauderate)
+        CommunicationGcode.__init__(self, portserial, bauderate)
         self.distance_capteur = [0]*8
 
     def get_distance(self, capteur):
@@ -44,7 +44,7 @@ class Carte_detecteur_obstacle(Communication_Gcode):
 if __name__ == "__main__":
     import time
 
-    carte = Carte_detecteur_obstacle("COM7", 9600)
+    carte = CommunicationGcode("COM7", 9600)
 
     while True:
         print(carte.get_distance(0))

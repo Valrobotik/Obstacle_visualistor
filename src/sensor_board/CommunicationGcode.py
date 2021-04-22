@@ -16,7 +16,7 @@ ls /dev/tty*
 import serial
 
 
-class Communication_Gcode(object):
+class CommunicationGcode(object):
     """
     Classe communication sur le port serial.
     """
@@ -28,7 +28,7 @@ class Communication_Gcode(object):
             portserial (char): Port USB de l'arduino
             bauderate (float): bauderate de la carte
         """
-        super(Communication_Gcode, self).__init__()
+        super(CommunicationGcode, self).__init__()
         self.serial = serial.Serial()
         self.serial.port = portserial
         self.serial.baudrate = bauderate
