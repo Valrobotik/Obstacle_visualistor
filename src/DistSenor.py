@@ -42,6 +42,29 @@ class DistSensor(object):
         self.obstacle_pose = np.array([distance_x, distance_y])
         return self.obstacle_pose
 
+    def get_transformation_matrix(self):
+        # Projection dans le repère du robot mais positionné sur le capteur
+        # x (obstacle->capteur)/robot = - distance * sin(theta)
+        # y (obstacle->capteur)/robot = distance * cos(theta)
+        x = self.position[0]
+        y = self.position[1]
+        theta = self.position[2]
+        m_robot_capteur_rotation = np.array([[-np.sin(theta),  -np.cos(theta), 0],
+                                             [np.cos(theta), -np.sin(theta), 0],
+                                             [0, 0, 1]])
+
+        # Déplacement de ce rèpere au centre du robot
+        # x (capteur ->centre)/robot
+        # y (capteur ->centre)/robot
+        M_robot_centre_translation = np.array([[1, 0, x],
+                                               [0, 1, y],
+                                               [0, 0, 1]])
+        M_robot_centre = np.dot(M_robot_centre_translation,
+                                m_robot_capteur_rotation)
+        
+        return M_robot_centre
+
+
     def get_obstacle_pose(self):
         """[summary]
         Returns:
@@ -50,18 +73,12 @@ class DistSensor(object):
         if any(elem is None for elem in self.obstacle_pose):
             return [[], []]*2
 
+        M_robot_centre = self.get_transformation_matrix()
 
-        # Projection dans le repère du robot mais positionné sur le capteur
-        # x (obstacle->capteur)/robot = - distance * sin(theta)
-        # y (obstacle->capteur)/robot = distance * cos(theta)
-        theta = self.position[2]
-        repere_robot_capteur = np.array([[-np.sin(theta),  np.cos(theta)],
-                                         [-np.cos(theta), -np.sin(theta)]])
+        obstace_pose = self.obstacle_pose
+        obstace_pose = np.append(obstace_pose, 1 )
 
-        # Déplacement de ce rèpere au centre du robot
-        # x (capteur ->centre)/robot
-        # y (capteur ->centre)/robot
-        repere_robot_centre = np.array([self.position[0], self.position[1]])
+        obstace_pose = np.dot(M_robot_centre, obstace_pose)
         
         # Projection dans le repère du robot au point du capteur puis translation vers le centre du robot
-        return np.dot(self.obstacle_pose, repere_robot_capteur) + repere_robot_centre
+        return np.array([obstace_pose[0], obstace_pose[1]])
