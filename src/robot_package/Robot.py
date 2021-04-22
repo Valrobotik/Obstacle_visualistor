@@ -1,5 +1,4 @@
 import numpy as np
-from affichage import get_robot_points
 #Robot point dans yalm
 
 class Robot():
@@ -28,10 +27,17 @@ class Robot():
         return M_robot_table
 
     def get_robot_point(self):
-        robot = get_robot_points()
+        robot = self.get_robot_points()
         robot.append([1]*len(robot[0]))
 
         M_robot_table = self.get_transformation_matrix()
         robot = np.dot(M_robot_table, robot)
 
         return np.array([robot[0], robot[1]])
+    
+    def get_robot_points(self):
+        robot_x = [-150, 150, 150, 20, 20, -20, -20, -150]
+        robot_y = [50, 50, -50, -50, -150, -150, -50, -50]
+        robot_x += [robot_x[0]]
+        robot_y += [robot_y[0]]
+        return [robot_x, robot_y]
