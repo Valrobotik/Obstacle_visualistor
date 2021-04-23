@@ -43,7 +43,7 @@ class Robot():
     def get_robot_shape(self):
         return self.shape
 
-    def transform_robot_point_2_robot_table(self, coordonnee_point):
+    def transform_robot2table(self, coordonnee_point):
         if coordonnee_point == [[], []]:
             return np.array([[], []])
         
