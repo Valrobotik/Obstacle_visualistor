@@ -8,7 +8,7 @@ import yaml
 def yaml_data_import(nom_fichier):
     with open(nom_fichier) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
-        return data.items()
+        return data
 
 
 if __name__ == "__main__":

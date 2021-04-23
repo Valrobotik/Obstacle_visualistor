@@ -1,11 +1,11 @@
 from utils.curvelinear_plot import curvelinear_plot, get_robot_points
-from robot_package.capteur_creator import capteur_creator
+from robot_package.data_robot_creator import data_robot_creator
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def init_plot(ax, dist_sensors):
+def init_plot(ax, point_robot, dist_sensors):
     """Fonction pour initier l'affichage.
 
     Args:
@@ -16,8 +16,7 @@ def init_plot(ax, dist_sensors):
         liste matplotlib.line : liste de tous les éléments à tracer sur l'axe. Ils sont regroupé pour un seul capteur
     """
     # Affichage du robot
-    robot = get_robot_points()
-    ax.plot(robot[0], robot[1])
+    ax.plot(point_robot[0], point_robot[1])
 
     # Affichage des capteurs
     data2plot = []
@@ -74,10 +73,10 @@ if __name__ == "__main__":
     fig, ax = curvelinear_plot(500)
 
     # initialisation des capteurs
-    nom_fichier = './src/capteur_config.yaml'
-    dist_sensors = capteur_creator(nom_fichier)
+    nom_fichier = './src/robot_config.yaml'
+    point_robot, dist_sensors = data_robot_creator(nom_fichier)
     
-    data2plot = init_plot(ax, dist_sensors)
+    data2plot = init_plot(ax, point_robot, dist_sensors)
 
     # Attention le plot ne se ferme pas avec la croix de la fenètre
     while True:

@@ -1,0 +1,50 @@
+point_robot:
+  p1:
+    x: -150
+    y: 50
+  p2:
+    x: 150
+    y: 50
+  p3:
+    x: 150
+    y: -50
+  p4:
+    x: 20
+    y: -50
+  p5:
+    x: 20
+    y: -150
+  p6:
+    x: -20
+    y: -150
+  p7: 
+    x: -20
+    y: -50
+  p8:
+    x: -150
+    y: -50
+
+capteurs:
+  ultrason1:
+    type: ultrason
+    x: 20 # position suivant x en mm
+    y: 50 # position suivant y en mm
+    theta: -30 #angle en degrès
+
+  ultrason4:
+    type: ultrason
+    x: -20 # position suivant x en mm
+    y: 50 # position suivant y en mm
+    theta: 30 #angle en degrès
+
+  ultrason2:
+    type: ultrason
+    x: -30 # position suivant x en mm
+    y: -50 # position suivant y en mm
+    theta: -190 #angle en degrès
+
+  ultrason3:
+    type: ultrason
+    x: +30 # position suivant x en mm
+    y: -50 # position suivant y en mm
+    theta: 190 #angle en degrès
