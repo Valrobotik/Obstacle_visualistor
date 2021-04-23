@@ -74,10 +74,11 @@ if __name__ == "__main__":
     #affichage
     fig, ax = curvelinear_plot(500)
 
-    # initialisation des capteurs
+    # Chargement des données capteurs et robot du fichier robot_config.yaml
     nom_fichier = './src/robot_config.yaml'
     point_robot, dist_sensors = data_robot_creator(nom_fichier)
     
+    #Liste contenant les objets à afficher
     data2plot = init_plot(ax, point_robot, dist_sensors)
 
     # Attention le plot ne se ferme pas avec la croix de la fenètre
