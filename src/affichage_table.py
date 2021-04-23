@@ -67,6 +67,13 @@ def update_data(robot, dist_sensors):
 
 
 def update_plot(data2plot, robot, dist_sensors):
+    """Fonction pour update les datas du plot, et faire l'animation
+
+    Args:
+        data2plot (liste de matplotlib.lines): liste contenant les lines à annimer
+        robot (Robot): Rboot à mettre à jour
+        dist_sensors (Liste Distsensor): Capteurs à mettre à jour.
+    """
     point_robot = robot.get_robot_point()
     data2plot[0].set_data(point_robot[0], point_robot[1])
 
