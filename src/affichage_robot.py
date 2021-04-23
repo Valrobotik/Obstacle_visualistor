@@ -1,61 +1,71 @@
-from robot_package.DistSenor import DistSensor
 from utils.curvelinear_plot import curvelinear_plot, get_robot_points
-from utils.yaml_utils import yaml_data_import
+from robot_package.capteur_creator import capteur_creator
 
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-from itertools import count
 
 
 def init_plot(ax, dist_sensors):
+    """Fonction pour initier l'affichage.
+
+    Args:
+        ax (matplotlib.axe): axe sur lequel on va tracer les éléments
+        dist_sensors (liste DistSensor): liste avec tous les capteurs 
+
+    Returns:
+        liste matplotlib.line : liste de tous les éléments à tracer sur l'axe. Ils sont regroupé pour un seul capteur
+    """
+    # Affichage du robot
     robot = get_robot_points()
     ax.plot(robot[0], robot[1])
-    sensor_plots = []
-    sensor_dir_plots = []
-    sensor_obs_plots = []
+
+    # Affichage des capteurs
+    data2plot = []
     
     for sensor in dist_sensors:
+        data_plot1sensor = []
+        #Affichage capteur
         sensor_pose = sensor.get_sensor_pose()
         tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ko')
-        sensor_plots.append(tmp_plot)
+        data_plot1sensor.append(tmp_plot)
 
-        # tmp_plot, = ax.plot([sensor_pose[0], sensor_pose[0]+ 10*np.cos(sensor_pose[2])], [sensor_pose[1], sensor_pose[1] + sensor_pose[1] + 10*np.sin(sensor_pose[2])], 'k')
+        # Affichage direction
         tmp_plot, = ax.plot([], [], 'k')
-        sensor_dir_plots.append(tmp_plot)
+        data_plot1sensor.append(tmp_plot)
 
+        # Affichage obstacle
         sensor_obs = sensor.get_obstacle_pose()
-        tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ro')
-        sensor_obs_plots.append(tmp_plot)
+        tmp_plot, = ax.plot(sensor_obs[0], sensor_obs[1], 'ro')
+        data_plot1sensor.append(tmp_plot)
 
-    return sensor_plots, sensor_dir_plots, sensor_obs_plots
+        data2plot.append(data_plot1sensor)
 
+    return data2plot
 
-index = count()
-
-
+# Variable à incrementer pour simuler les capteurs
+index = 0
 def update_data(dist_sensors):
-    data = next(index)
+    global index
+    index += 1
     for sensor in dist_sensors:
-        new_dist = 200+200*np.cos(0.1*data) # generation des datas
+        new_dist = 200+200*np.cos(0.1*index)  # generation des datas
         sensor.set_dist(new_dist, 0)    #update des data des capteurs
 
 
-def update_plot(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
-    for sensor, sensor_plot, sensor_obs_plot, sensor_dir_plot in zip(dist_sensors, sensor_plots, sensor_obs_plots, sensor_dir_plots):
+def update_plot(data2plot, dist_sensors):
+    # Maintenant on décompile les objets à update sur le plot avec son sensor associé
+    for data, sensor in zip(data2plot, dist_sensors):
         # sensor
         sensor_pose = sensor.get_sensor_pose()
-        # ax.plot(sensor_pose[0], sensor_pose[1], 'k.')
-        sensor_plot.set_data(sensor_pose[0], sensor_pose[1])
+        data[0].set_data(sensor_pose[0], sensor_pose[1])
 
         #tracé de la direction du capteur
-        sensor_dir_plot.set_data([sensor_pose[0], sensor_pose[0] + 50*np.sin(-sensor_pose[2])], [
+        data[1].set_data([sensor_pose[0], sensor_pose[0] + 50*np.sin(-sensor_pose[2])], [
                                  sensor_pose[1], sensor_pose[1] + 50*np.cos(-sensor_pose[2])])
 
         # obstacle
         sensor_obstacle_pose = sensor.get_obstacle_pose()
-        # ax.plot(sinsor_obstacle_pose[0],sensor_obstacle_pose[1], 'ro')
-        sensor_obs_plot.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
+        data[2].set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
 
 
 if __name__ == "__main__":
@@ -64,22 +74,15 @@ if __name__ == "__main__":
     fig, ax = curvelinear_plot(500)
 
     # initialisation des capteurs
-    dist_sensors = []
     nom_fichier = './src/capteur_config.yaml'
-    liste_capteur = yaml_data_import(nom_fichier)
+    dist_sensors = capteur_creator(nom_fichier)
+    
+    data2plot = init_plot(ax, dist_sensors)
 
-    # Ajout des capteurs en fonction du fichier capteur_config.yaml
-    for capteur, data in liste_capteur:
-        dist_sensors.append(DistSensor(
-            data['x'], data['y'], np.deg2rad(data['theta'])))
-
-
-    sensor_plots, sensor_dir_plots, sensor_obs_plots = init_plot(ax, dist_sensors)    
     # Attention le plot ne se ferme pas avec la croix de la fenètre
     while True:
         update_data(dist_sensors)
-        update_plot(dist_sensors, sensor_plots,
-                    sensor_obs_plots, sensor_dir_plots)
+        update_plot(data2plot, dist_sensors)
         plt.pause(0.1)
 
 
