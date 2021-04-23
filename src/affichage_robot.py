@@ -35,6 +35,8 @@ def init_plot(ax, point_robot, dist_sensors):
         # Affichage obstacle
         sensor_obs = sensor.get_obstacle_pose()
         tmp_plot, = ax.plot(sensor_obs[0], sensor_obs[1], 'ro')
+        
+        # Save data in data2plot for this sensor
         data_plot1sensor.append(tmp_plot)
 
         data2plot.append(data_plot1sensor)
