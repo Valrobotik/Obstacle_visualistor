@@ -71,7 +71,7 @@ class DistSensor(object):
             [np.array]: position in mm of the obstacle in the robot space (cartesian coordinate)
         """
         if any(elem is None for elem in self.obstacle_pose):
-            return [[], []]*2
+            return [[], []]
 
         M_robot_centre = self.get_transformation_matrix()
 

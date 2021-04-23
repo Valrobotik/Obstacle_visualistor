@@ -29,7 +29,7 @@ capteurs:
     type: ultrason
     x: 20 # position suivant x en mm
     y: 50 # position suivant y en mm
-    theta: -30 #angle en degrès
+    theta: 0 #angle en degrès
 
   ultrason4:
     type: ultrason
