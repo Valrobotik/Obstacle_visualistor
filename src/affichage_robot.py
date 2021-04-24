@@ -1,4 +1,4 @@
-from utils.curvelinear_plot import curvelinear_plot, get_robot_points
+from utils.curvelinear_plot import curvelinear_plot
 from robot_package.data_robot_creator import data_robot_creator
 
 import matplotlib.pyplot as plt
