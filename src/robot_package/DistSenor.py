@@ -76,9 +76,9 @@ class DistSensor(object):
         M_robot_centre = self.get_transformation_matrix()
 
         obstace_pose = self.obstacle_pose
-        obstace_pose = np.append(obstace_pose, 1 )
+        obstace_pose = np.append(obstace_pose, [1], axis=0 )
 
         obstace_pose = np.dot(M_robot_centre, obstace_pose)
         
         # Projection dans le repère du robot au point du capteur puis translation vers le centre du robot
-        return np.array([obstace_pose[0], obstace_pose[1]])
+        return np.array([[obstace_pose[0]], [obstace_pose[1]]])
