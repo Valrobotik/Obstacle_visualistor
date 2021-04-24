@@ -1,14 +1,29 @@
+if __name__ == "__main__":
+    # Pour executer le code en local et avoir les bon import
+    import sys
+    import os
+    sys.path.append(os.getcwd() + "\\src")
+    from robot_package.data_robot_creator import data_robot_creator
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.axisartist.angle_helper as angle_helper
 from matplotlib.projections import PolarAxes
 from matplotlib.transforms import Affine2D
-from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear, Axes
+from mpl_toolkits.axisartist import HostAxes, GridHelperCurveLinear
 
 
 def curvelinear_plot(rayon_max = 1000):
-    """Polar projection, but in a rectangular box."""
-    # see demo_curvelinear_grid.py for details
+    """Fonction pour créer un repère cartésien avec en décoration les coordonnées polaire pour mieux repérer les angles
+    Cette fonction est basée sur un exemple matplotlib : see demo_curvelinear_grid.py for details
+
+    Args:
+        rayon_max (float, optional): Rayon amximal du plot dans lequel afficher le robot. Defaults to 1000.
+
+    Returns:
+        matplotlib.fig, matplotlib.ax : figure et axe matplotlib dans lequel on fait l'affichage
+    """
     tr_rotate = Affine2D().translate(90, 0)
     tr_scale = Affine2D().scale(np.pi/180., 1.)
     tr = tr_rotate + tr_scale + PolarAxes.PolarTransform()
@@ -62,28 +77,15 @@ def curvelinear_plot(rayon_max = 1000):
     return fig, ax1
 
 
-def get_robot_points():
-    robot_x = [-150, 150, 150, 20, 20, -20, -20, -150]
-    robot_y = [50, 50, -50, -50, -150, -150, -50, -50]
-    robot_x += [robot_x[0]]
-    robot_y += [robot_y[0]]
-    return [robot_x, robot_y]
-
 
 
 if __name__ == "__main__":
-    def draw_robot(ax):
-        """Affichage du robot sur le graphe
 
-            Args:
-                ax (matplotlib ax): ax matplotlib
-        """
-        robot = get_robot_points()
+    fig, ax1 = curvelinear_plot(500)
+    nom_fichier = './src/robot_config.yaml'
+    point_robot, dist_sensors = data_robot_creator(nom_fichier)
 
-        ax.plot(robot[0], robot[1])
-
-    fig, ax1 = curvelinear_plot()
-    draw_robot(ax1)
+    ax1.plot(point_robot[0], point_robot[1])
 
 
     plt.show()
