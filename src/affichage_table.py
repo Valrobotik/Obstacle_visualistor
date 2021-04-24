@@ -57,9 +57,12 @@ def update_data(robot, dist_sensors):
         robot (Robot): [description]
         dist_sensors ([type]): [description]
     """
-    global x
-    robot.update_position(1500 + 200*np.cos(x), 1000, 0) #+ 200*np.sin(x), np.arctan2(np.cos(-x), np.sin(-x)))
+    global x    # Variable gloabale pour simuler. A remplacer par les vrai paramètres du robot
+    robot.update_position(1500 + 200*np.cos(x), 1000, 0) 
+    # #Pour un cercle :
+    # robot.update_position(1500 + 200*np.cos(x), 1000+ 200*np.sin(x), np.arctan2(np.cos(-x), np.sin(-x)))
     
+    # On boucle sur les capteurs pour leur donner un nouvelle valeur
     for sensor in dist_sensors:
         new_dist = 200+200*np.cos(x)  # generation des datas
         sensor.set_dist(new_dist, 0)  # update des data des capteurs
@@ -77,8 +80,10 @@ def update_plot(data2plot, robot, dist_sensors):
     point_robot = robot.get_robot_point()
     data2plot[0].set_data(point_robot[0], point_robot[1])
 
+    # On boucle sur les capteurs et les matplotlib.line à actualiser
     for data, sensor in zip(data2plot[1], dist_sensors):
-        sensor_obstacle_pose = sensor.get_obstacle_pose()
+        sensor_obstacle_pose = sensor.get_obstacle_pose()   # Dans le repère du robot
+        # Transformation dans le repère de la table
         sensor_obstacle_pose = robot.transform_robot2table(sensor_obstacle_pose)
 
         data.set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
@@ -102,9 +107,11 @@ robot.define_robot_shape(np.array(point_robot))
 ############################
 # Affichage
 ##############################
+# Création et initialisation du plot
 fig, ax = plt.subplots(1, 1)
 data2plot = init_plot(ax, point_table, robot, dist_sensors)
 
+# Boucle d'animation
 x = 0 # data x pour simuler les capteurs et le déplacement du robot.
 while True:
     update_data(robot, dist_sensors)
