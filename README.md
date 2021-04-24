@@ -159,7 +159,6 @@ On peut alors imaginer la fonction de mise à jour des données :
 
 ```python
 def update_data(dist_sensors, carte):
-    global index
     index = 0
     for sensor in dist_sensors:
         new_dist = carte.get_distance(index)  # récupération des différentes données de la carte
