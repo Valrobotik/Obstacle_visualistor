@@ -22,7 +22,8 @@ class Robot():
 
     def get_transformation_matrix(self):
         """Création des matrices de transformation pour passer d'un capteur au repère du robot
-
+        On utilise des matrices 3,3 pour les cooronnée (x, y) afin de faire la transformation avec un produit matriciel.
+        Plus d'info : https://www2.ift.ulaval.ca/~pgiguere/cours/IntroRobotique2017/notes/03-VisionIII.pdf
         Returns:
             np.array (3,3): Matrice de transformation rotation et translation pour passer d'une coordonnée (x,y) du robot à une coordonnée (x,y) dans le repère de la table.
         """
