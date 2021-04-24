@@ -20,6 +20,7 @@ def init_plot(ax, table, robot, dist_sensors):
     Returns:
         matplotlib.line : liste contenant les lignes qu'il faudra mettre à jour pour l'animation
     """
+    # Liste des futurs objets à actualiser sur le plot
     data2plot = []
 
     # Affichage objet fixe, et définition du plot
@@ -51,11 +52,11 @@ def init_plot(ax, table, robot, dist_sensors):
 
 
 def update_data(robot, dist_sensors):
-    """Fonction pour mettre à jour les objets à afficher
+    """Fonction pour mettre à jour les doonées des objets à afficher
 
     Args:
-        robot (Robot): [description]
-        dist_sensors ([type]): [description]
+        robot (Robot): robot à actualiser (position)
+        dist_sensors (liste Distsensor): liste contenant tous les capteurs
     """
     global x    # Variable gloabale pour simuler. A remplacer par les vrai paramètres du robot
     robot.update_position(1500 + 200*np.cos(x), 1000, 0) 
@@ -70,12 +71,12 @@ def update_data(robot, dist_sensors):
 
 
 def update_plot(data2plot, robot, dist_sensors):
-    """Fonction pour update les datas du plot, et faire l'animation
+    """Fonction pour récupérer les datas et mettre à jour le plot, donc faire l'animation
 
     Args:
         data2plot (liste de matplotlib.lines): liste contenant les lines à annimer
-        robot (Robot): Rboot à mettre à jour
-        dist_sensors (Liste Distsensor): Capteurs à mettre à jour.
+        robot (Robot): Robot à afficher
+        dist_sensors (Liste Distsensor): Capteurs à afficher.
     """
     point_robot = robot.get_robot_point()
     data2plot[0].set_data(point_robot[0], point_robot[1])
