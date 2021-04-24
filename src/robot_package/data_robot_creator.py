@@ -8,6 +8,14 @@ from robot_package.DistSenor import DistSensor
 import numpy as np
 
 def data_robot_creator(nom_fichier):
+    """Fonction pour retourner les points du robot et les données des capteurs extrait de la configuration yaml
+
+    Args:
+        nom_fichier (string): nom du fichier de configuration yaml
+
+    Returns:
+        dict: dictionnaire contenant les configurations
+    """
     dict_data = yaml_data_import(nom_fichier)
 
 
@@ -19,19 +27,34 @@ def data_robot_creator(nom_fichier):
 
 
 def capteur_creator(dict_capteur):
+    """Fonction permettant d'extraire les données des capteurs du dictionnaire générer par l'importation du yaml
+
+    Args:
+        dict_capteur (dict): diictionnaire de configuration des capteurs
+
+    Returns:
+        liste Distsensor: liste contenant les objets distsensor des capteurs configurés. L'angle est en RADIAN
+    """
     # initialisation de la liste de capteurs
     dist_sensors = []
     
     # Ajout des capteurs en fonction du fichier capteur_config.yaml
     for capteur in dict_capteur:
         data = dict_capteur.get(capteur)
-        dist_sensors.append(DistSensor(
-            data['x'], data['y'], np.deg2rad(data['theta'])))
+        dist_sensors.append(DistSensor(data['x'], data['y'], np.deg2rad(data['theta'])))
     
     return dist_sensors
 
 
 def robot_point_creator(dict_point):
+    """Fonction qui permet de convertir les données dictionnaires de configuration de la forme du robot en une liste de point
+
+    Args:
+        dict_point (dict): dictionnaire de configuration de la forme du robot
+
+    Returns:
+        liste: liste des coordonnées dans le repère du robot de sa forme
+    """
     # initialisation de la liste de capteurs
     robot_pointX = []
     robot_pointY = []
