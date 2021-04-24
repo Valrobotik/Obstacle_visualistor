@@ -18,11 +18,15 @@ def init_plot(ax, point_robot, dist_sensors):
     # Affichage du robot
     ax.plot(point_robot[0], point_robot[1])
 
-    # Affichage des capteurs
+    # initialisation de la liste qui va contenir tous les éléments à actualiser sur l'affichage
     data2plot = []
-    
+    # Récupération des capteurs. 
     for sensor in dist_sensors:
+        # Comme on trace seulement les capteurs et pas d'autres éléments, on choisi de regrouper ici dans une même liste tous les éléments qui appartiennent à ce capteur.
+        # data2plot contient alors que des éléments dans le repère du robot.
+        # Dans l'exemple de l'affichage de la table, on a aussi le robot qui bouge, donc on a séparé les capteurs (dans le repère du robot), du robot lui même qui est dans le repère de la table.
         data_plot1sensor = []
+        
         #Affichage capteur
         sensor_pose = sensor.get_sensor_pose()
         tmp_plot, = ax.plot([sensor_pose[0]], sensor_pose[1], 'ko')
@@ -35,10 +39,9 @@ def init_plot(ax, point_robot, dist_sensors):
         # Affichage obstacle
         sensor_obs = sensor.get_obstacle_pose()
         tmp_plot, = ax.plot(sensor_obs[0], sensor_obs[1], 'ro')
-        
-        # Save data in data2plot for this sensor
         data_plot1sensor.append(tmp_plot)
 
+        # sauvegarde dans la liste des éléments à afficher
         data2plot.append(data_plot1sensor)
 
     return data2plot
@@ -46,6 +49,11 @@ def init_plot(ax, point_robot, dist_sensors):
 # Variable à incrementer pour simuler les capteurs
 index = 0
 def update_data(dist_sensors):
+    """Fonction pour mettre à jour les postions des obstacle, des capteurs, etc...
+    Pour la simulation on chosisi un obstacle qui varie d'une distance sinusoïdal
+    Args:
+        dist_sensors (liste Distsensor): Liste contenant les capteurs à afficher
+    """
     global index
     index += 1
     for sensor in dist_sensors:
@@ -54,6 +62,12 @@ def update_data(dist_sensors):
 
 
 def update_plot(data2plot, dist_sensors):
+    """Fonction pour afficher les objets : capteurs, direction capteur, obstacle.
+
+    Args:
+        data2plot (liste matplotlib.line): liste des élements à afficher
+        dist_sensors (liste Distsensor): liste des capteurs. C'est utile pour récupérer la distance qu'ils mesurent
+    """
     # Maintenant on décompile les objets à update sur le plot avec son sensor associé
     for data, sensor in zip(data2plot, dist_sensors):
         # sensor
@@ -85,7 +99,7 @@ if __name__ == "__main__":
     while True:
         update_data(dist_sensors)
         update_plot(data2plot, dist_sensors)
-        plt.pause(1.0/30)
+        plt.pause(1.0/30) # 30 ips
 
 
 
