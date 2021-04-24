@@ -85,7 +85,7 @@ if __name__ == "__main__":
     while True:
         update_data(dist_sensors)
         update_plot(data2plot, dist_sensors)
-        plt.pause(0.1)
+        plt.pause(1.0/30)
 
 
 
