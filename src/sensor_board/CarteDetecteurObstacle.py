@@ -5,7 +5,7 @@ if __name__ == "__main__":
     sys.path.append(os.getcwd() + "\\src")
 
 from sensor_board.CommunicationGcode import CommunicationGcode
-
+import numpy as np
 
 class CarteDetecteurObstacle(CommunicationGcode):
     """Api for using the robot.
@@ -16,33 +16,26 @@ class CarteDetecteurObstacle(CommunicationGcode):
 
     def __init__(self, portserial, bauderate) -> None:
         CommunicationGcode.__init__(self, portserial, bauderate)
-        self.distance_capteur = [0]*8
+
 
     def get_distance(self, capteur):
         """Fonction qui met à jour la position actuelle du robot dans la classe.
-
-        Returns:
-            Pose2D: Position actuelle du robot.
         """
         if (self.serial.is_open):
             self.serial.write(b'S')
             self.serial.write(str(capteur).encode())
             self.serial.write(b'\n')
 
-            message = self.decode_serial()
+            message = self.decode_serial(separator="; ")
             # print(message)
 
             if message[0] != '':
                 if capteur == "A":
-                    #TODO
-                    pass
+                    return np.array(message, dtype=float)
                 else:
-                    distance = float(message[0])
-                    self.distance_capteur[capteur] = distance
-                
-                    return distance
-            
-            return 0
+                    return float(message[0])
+
+            return -1
 
 
 if __name__ == "__main__":
@@ -51,6 +44,7 @@ if __name__ == "__main__":
     carte = CarteDetecteurObstacle("COM8", 9600)
 
     while True:
-        print(carte.get_distance(0))
-
-        time.sleep(0.2)
+        # print(carte.get_distance(0))
+        A = carte.get_distance("A")
+        print(A)
+        # time.sleep(0.2)

@@ -51,8 +51,7 @@ class CommunicationGcode(object):
         self.serial.flushInput()
         self.serial.flushOutput()
     
-    
-    def decode_serial(self):
+    def decode_serial(self, separator = " "):
         """
         Fonction pour lire, décoder, et mettre les données de la sérial dans une liste
         """
@@ -60,6 +59,6 @@ class CommunicationGcode(object):
 
         message = message.decode()  # Conversion bytes en str
         message = message.rstrip()  # Enlève \n
-        message = message.split(" ")  # Conversion str en list
+        message = message.split(separator)  # Conversion str en list
 
         return message
