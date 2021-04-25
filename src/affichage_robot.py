@@ -71,18 +71,19 @@ def update_data(dist_sensors, carte):
     """
     liste_distance = carte.get_distance("A")
     # Gestion du nombre de capteur minimal (soit dans le fichier robot_config.yaml, soit de la carte de capteur)
-    nombre_capteur = min( len(dist_sensors), len(liste_distance) )
+    nb_capt_virtuel = len(dist_sensors)
+    nb_capt_reel = len(liste_distance)
 
     # on associe le capteur virtuel à la distance réelle mesurée
-    for sensor, new_dist in zip(dist_sensors[:nombre_capteur], liste_distance[:nombre_capteur]):
-        sensor.set_dist(new_dist, 0)  # update des data des capteurs
+    for i in range(nb_capt_virtuel):
+        if i < nb_capt_reel:
+            dist_sensors[i].set_dist(liste_distance[i], 0)
+        else:
+            # Le cas limitant est si il manque de capteurs réels par rapport à l'affichage.
+            # On donne donc une distance de mesure à 0 pour ces capteurs.
+            dist_sensors[i].set_dist(0, 0)
 
-    # Le cas limitant est si il manque de capteurs réels par rapport à l'affichage. 
-    # On donne donc une distance de mesure à 0 pour ces capteurs.
-    for sensor in dist_sensors[nombre_capteur:] :
-        sensor.set_dist(0, 0)
-
-    # Si il y a trop de capteurs, ils ne seront pas affiché
+    # Si il y a trop de capteurs réels, ils ne seront pas affichés
 
 def update_plot(data2plot, dist_sensors):
     """Fonction pour afficher les objets : capteurs, direction capteur, obstacle.
