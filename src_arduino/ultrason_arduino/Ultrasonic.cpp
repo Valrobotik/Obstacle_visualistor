@@ -64,8 +64,8 @@ double Ultrasonic::Distance()
   ///// Calcule de la distance
   // vitesse du son dans l'air (Wikipedia) : c = 20.05*sqrt(T) (T en Kelvin)
   // c = 346.2037628 m/s à 25°C
-  // donc c = 0.3462037628 µs/mm --> soit 1/c = 0.2889199234 mm/µs
+  // donc c = 0.3462037628 µs/mm
   // Puis il faut diviser par 2 la distance
 
-  return 0.2889199234 * (duration/2) ;
+  return 0.3462037628 * (duration / 2);
 }
