@@ -1,4 +1,8 @@
-
+if __name__ == "__main__":
+    # Pour executer le code en local et avoir les bon import
+    import sys
+    import os
+    sys.path.append(os.getcwd() + "\\src")
 
 from sensor_board.CommunicationGcode import CommunicationGcode
 
@@ -44,7 +48,7 @@ class CarteDetecteurObstacle(CommunicationGcode):
 if __name__ == "__main__":
     import time
 
-    carte = CommunicationGcode("COM7", 9600)
+    carte = CarteDetecteurObstacle("COM8", 9600)
 
     while True:
         print(carte.get_distance(0))

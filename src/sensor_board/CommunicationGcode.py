@@ -21,7 +21,7 @@ class CommunicationGcode(object):
     Classe communication sur le port serial.
     """
 
-    def __init__(self, portserial, bauderate):
+    def __init__(self, portserial, bauderate, timeout = 1):
         """Initialisation des variables internes de la classe.
 
         Args:
@@ -32,7 +32,7 @@ class CommunicationGcode(object):
         self.serial = serial.Serial()
         self.serial.port = portserial
         self.serial.baudrate = bauderate
-        self.serial.timeout = 0
+        self.serial.timeout = timeout
         self.serial.open()
 
     def __del__(self):
