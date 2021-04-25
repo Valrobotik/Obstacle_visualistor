@@ -1,5 +1,6 @@
 from utils.curvelinear_plot import curvelinear_plot
 from robot_package.data_robot_creator import data_robot_creator
+from sensor_board.CarteDetecteurObstacle import CarteDetecteurObstacle
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -61,6 +62,20 @@ def update_data(dist_sensors):
         sensor.set_dist(new_dist, 0)    #update des data des capteurs
 
 
+def update_data(dist_sensors, carte):
+    """Fonction pour mettre à jour les postions des obstacle, des capteurs, etc...
+    Surcharge de la fonction ci-dessus pour mettre en place les capteurs.
+    Args:
+        dist_sensors (liste Distsensor): Liste contenant les capteurs à afficher
+        carte (CarteDetecteurObstacle) : carte de mesure de distance avec communication en GCODE
+    """
+    liste_distance = carte.get_distance("A")
+    # on associe le capteur virtuel à la distance réelle mesurée
+    for sensor, new_dist in zip(dist_sensors, liste_distance):
+        sensor.set_dist(new_dist, 0)  # update des data des capteurs
+
+
+
 def update_plot(data2plot, dist_sensors):
     """Fonction pour afficher les objets : capteurs, direction capteur, obstacle.
 
@@ -85,9 +100,16 @@ def update_plot(data2plot, dist_sensors):
 
 
 if __name__ == "__main__":
+    ################
+    # Definition de la carte de capteur
+    carte = CarteDetecteurObstacle("COM8", 9600)
+    # A = carte.get_distance("A")
+    # print(A)
+
+
     ####################
     #affichage
-    fig, ax = curvelinear_plot(600)
+    fig, ax = curvelinear_plot(300)
 
     # Chargement des données capteurs et robot du fichier robot_config.yaml
     nom_fichier = './src/robot_config.yaml'
@@ -98,7 +120,7 @@ if __name__ == "__main__":
 
     # Attention le plot ne se ferme pas avec la croix de la fenètre
     while True:
-        update_data(dist_sensors)
+        update_data(dist_sensors, carte)
         update_plot(data2plot, dist_sensors)
         ax.legend(loc='lower left', title="Distance (mm)")
         plt.pause(1.0/30) # 30 ips

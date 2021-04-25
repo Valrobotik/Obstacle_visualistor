@@ -16,6 +16,7 @@ class CarteDetecteurObstacle(CommunicationGcode):
 
     def __init__(self, portserial, bauderate) -> None:
         CommunicationGcode.__init__(self, portserial, bauderate)
+        self.get_distance("A") # Lecture une première fois de la distance pour l'initialisation
 
 
     def get_distance(self, capteur):
@@ -35,7 +36,7 @@ class CarteDetecteurObstacle(CommunicationGcode):
                 else:
                     return float(message[0])
 
-            return -1
+            return None
 
 
 if __name__ == "__main__":
