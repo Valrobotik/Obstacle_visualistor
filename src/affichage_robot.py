@@ -38,7 +38,7 @@ def init_plot(ax, point_robot, dist_sensors):
 
         # Affichage obstacle
         sensor_obs = sensor.get_obstacle_pose()
-        tmp_plot, = ax.plot(sensor_obs[0], sensor_obs[1], 'ro')
+        tmp_plot, = ax.plot(sensor_obs[0], sensor_obs[1], 'o', label=str(sensor.obstacle_pose[0]))
         data_plot1sensor.append(tmp_plot)
 
         # sauvegarde dans la liste des éléments à afficher
@@ -81,12 +81,13 @@ def update_plot(data2plot, dist_sensors):
         # obstacle
         sensor_obstacle_pose = sensor.get_obstacle_pose()
         data[2].set_data(sensor_obstacle_pose[0], sensor_obstacle_pose[1])
+        data[2].set_label(str(round(sensor.obstacle_pose[0], 2)))
 
 
 if __name__ == "__main__":
     ####################
     #affichage
-    fig, ax = curvelinear_plot(500)
+    fig, ax = curvelinear_plot(600)
 
     # Chargement des données capteurs et robot du fichier robot_config.yaml
     nom_fichier = './src/robot_config.yaml'
@@ -99,6 +100,7 @@ if __name__ == "__main__":
     while True:
         update_data(dist_sensors)
         update_plot(data2plot, dist_sensors)
+        ax.legend(loc='lower left', title="Distance (mm)")
         plt.pause(1.0/30) # 30 ips
 
 
