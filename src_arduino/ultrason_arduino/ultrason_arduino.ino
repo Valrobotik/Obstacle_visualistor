@@ -1,14 +1,20 @@
 //www.elegoo.com
 //2016.12.08
-#include "SR04.h"
+#include "Ultrasonic.h"
 
 #include "pin_configuration.h"
+#include "gcode_interpreter.h"
 
-#define NUMMBER_SENSOR 2
 #define FREQ 40 //Hz 
 
-SR04 sensor[NUMMBER_SENSOR] = { SR04(ECHO_PIN1, TRIG_PIN1), SR04(ECHO_PIN2, TRIG_PIN2) };
-double distance[NUMMBER_SENSOR] = {0.0 };
+// Changer le nombre de capteur et les ajouter dans la liste suivante
+#define NUMBER_SENSOR 2
+// TimeOut = Max.Distance(cm) * 58
+int TimeOut = 100 * 58;
+Ultrasonic sensor[NUMBER_SENSOR] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut), Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
+
+// Début du programme de récupération des distances
+double distance[NUMBER_SENSOR] = {0.0 };
 
 void setup() {
    Serial.begin(9600);
@@ -20,43 +26,21 @@ String inputString = "";     // a String to hold incoming data
 bool stringComplete = false; // whether the string is complete
 
 void loop() {
-   // Sav sensor data in the table
+   // Save sensor data in a table
    distance[x] = sensor[x].Distance();
-   x = (x + 1) % NUMMBER_SENSOR;
+   x = (x + 1) % NUMBER_SENSOR;
 
    // Serial read
    if (stringComplete)
    {
-      // Serial.println(inputString);
-      if (inputString[0] == 'S')
-      {
-         if (inputString[1] == 'A')
-         {
-            // Print all data
-            for (int x = 0; x < NUMMBER_SENSOR; x++)
-            {
-               Serial.print(distance[x]);
-               if (x != NUMMBER_SENSOR - 1)
-                  Serial.print("; "); // Delete ; at end of the line
-            }
-            Serial.println();
-         }
-         else
-         {
-            int index = inputString.substring(1).toInt();
-            if (-1 < index && index < NUMMBER_SENSOR)
-            {
-               Serial.println(distance[index]);
-            }
-         }
-      }
+      print_gcode2serial(inputString, distance, NUMBER_SENSOR);
       // clear the string:
       inputString = "";
       stringComplete = false;
       Serial.flush();
    }
    // Delay for all sensor
-   delay(1 / (NUMMBER_SENSOR * FREQ));
+   delay(1 / (NUMBER_SENSOR * FREQ));
 }
 
 /*
