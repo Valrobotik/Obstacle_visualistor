@@ -5,13 +5,15 @@
 #include "pin_configuration.h"
 #include "gcode_interpreter.h"
 
-#define FREQ 40 //Hz 
+#define FREQ 40 //Hz
+
+// TimeOut = Max.Distance(mm) * 5,88
+int TimeOut = 1000 * 5.8; // 1 m de distance max
 
 // Changer le nombre de capteur et les ajouter dans la liste suivante
 #define NUMBER_SENSOR 2
-// TimeOut = Max.Distance(cm) * 58
-int TimeOut = 100 * 58;
 Ultrasonic sensor[NUMBER_SENSOR] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut), Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
+
 
 // Début du programme de récupération des distances
 double distance[NUMBER_SENSOR] = {0.0 };
