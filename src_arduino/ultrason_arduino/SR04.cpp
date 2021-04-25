@@ -23,7 +23,7 @@ long SR04::Distance() {
     _duration = pulseIn(_echoPin, HIGH, PULSE_TIMEOUT);
     d = MicrosecondsToCentimeter(_duration);
     delay(25);
-    return d;
+    return 10*d;
 }
 
 long SR04::DistanceAvg(int wait, int count) {
