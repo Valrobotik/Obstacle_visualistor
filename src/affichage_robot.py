@@ -102,7 +102,7 @@ def update_plot(data2plot, dist_sensors):
 if __name__ == "__main__":
     ################
     # Definition de la carte de capteur
-    carte = CarteDetecteurObstacle("COM8", 9600)
+    carte = CarteDetecteurObstacle(portserial = "COM8", bauderate = 9600)
 
 
     ####################
@@ -118,6 +118,7 @@ if __name__ == "__main__":
 
     # Attention le plot ne se ferme pas avec la croix de la fenètre
     while True:
+        # update_data(dist_sensors)
         update_data(dist_sensors, carte)
         update_plot(data2plot, dist_sensors)
         ax.legend(loc='lower left', title="Distance (mm)")

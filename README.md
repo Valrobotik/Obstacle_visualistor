@@ -134,38 +134,28 @@ Ci dessous on représente la définition des axes utilisés dans ces algorithmes
 
 ## Intégration avec des capteurs réels
 
-Il est possible d'interfacer ces affichages avec des capteurs réels. Pour cela il suffit dans les deux scripts d'affichage de modifier la fonction `update_data()`. 
+Il est possible d'interfacer ces affichages avec des capteurs réels. 
 
-Cette fonction est appelée dans la boucle principale et permet d'actualiser facilement les données à afficher. On retrouve lors des simulation des données incrémentées. 
+J'ai alors créer une surcharge de la fonction `update_data()`. En ajoutant l'argument `carte`, on affiche les distances mesurées par le capteur réel.
 
-
+Dans un premier temps, il faut créer cet objet carte avec son port série et son bauderate :
 ```python
-def update_data(dist_sensors):
-    global index
-    index += 1
-    for sensor in dist_sensors:
-        new_dist = 200+200*np.cos(0.1*index)  # generation des datas
-        sensor.set_dist(new_dist, 0)    #update des data des capteurs
+from sensor_board.CarteDetecteurObstacle import CarteDetecteurObstacle
 
+# Definition de la carte de capteur
+carte = CarteDetecteurObstacle(portserial = "COM8", bauderate = 9600)
 ```
-Il faut alors remplacer les données simulées avec des données récupérée par un capteur. Pour cela, j'ai developpé un script qui permet d'interfacer une carte de capteur connectée sur le port série.
 
-```python
-# initialisation communication avec carte d'obstacles
-carte = Carte_detecteur_obstacle("COM7", 9600)
-distance = carte.get_distance(1) # récupération de la donnée du premier capteur
+Puis dans la boucle principale, il suffit de remplacer la fonction `update_data(dist_sensors)` par la fonction `update_data(dist_sensors, carte)` :
+
+```python 
+while True:
+    # update_data(dist_sensors)
+    update_data(dist_sensors, carte)
+    ...
 ```
-On peut alors imaginer la fonction de mise à jour des données : 
+De cette manière l'affichage affiche les données mesurées en temps réel par la carte des capteurs de distance.
 
-```python
-def update_data(dist_sensors, carte):
-    index = 0
-    for sensor in dist_sensors:
-        new_dist = carte.get_distance(index)  # récupération des différentes données de la carte
-        index += 1
-        sensor.set_dist(new_dist, 0)    #update des data des capteurs
-
-```
 
 
 ## Auteurs
