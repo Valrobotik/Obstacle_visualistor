@@ -103,8 +103,6 @@ if __name__ == "__main__":
     ################
     # Definition de la carte de capteur
     carte = CarteDetecteurObstacle("COM8", 9600)
-    # A = carte.get_distance("A")
-    # print(A)
 
 
     ####################
