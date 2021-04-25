@@ -156,7 +156,7 @@ while True:
 ```
 De cette manière l'affichage affiche les données mesurées en temps réel par la carte des capteurs de distance.
 
-
+❗❗ Il doit y avoir le même nombre de capteurs inscrits dans le fichier `robot_configuration.yaml` que de capteurs réels sur la carte de detection d'obstacle ❗❗
 
 ## Auteurs
 

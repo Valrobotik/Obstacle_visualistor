@@ -70,11 +70,19 @@ def update_data(dist_sensors, carte):
         carte (CarteDetecteurObstacle) : carte de mesure de distance avec communication en GCODE
     """
     liste_distance = carte.get_distance("A")
+    # Gestion du nombre de capteur minimal (soit dans le fichier robot_config.yaml, soit de la carte de capteur)
+    nombre_capteur = min( len(dist_sensors), len(liste_distance) )
+
     # on associe le capteur virtuel à la distance réelle mesurée
-    for sensor, new_dist in zip(dist_sensors, liste_distance):
+    for sensor, new_dist in zip(dist_sensors[:nombre_capteur], liste_distance[:nombre_capteur]):
         sensor.set_dist(new_dist, 0)  # update des data des capteurs
 
+    # Le cas limitant est si il manque de capteurs réels par rapport à l'affichage. 
+    # On donne donc une distance de mesure à 0 pour ces capteurs.
+    for sensor in dist_sensors[nombre_capteur:] :
+        sensor.set_dist(0, 0)
 
+    # Si il y a trop de capteurs, ils ne seront pas affiché
 
 def update_plot(data2plot, dist_sensors):
     """Fonction pour afficher les objets : capteurs, direction capteur, obstacle.

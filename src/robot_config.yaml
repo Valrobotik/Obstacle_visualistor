@@ -38,20 +38,20 @@ capteurs:
     y: 50 # position suivant y en mm
     theta: 30 #angle en degrès
 
-  # ultrason3:
-  #   type: ultrason
-  #   x: -30 # position suivant x en mm
-  #   y: -50 # position suivant y en mm
-  #   theta: -190 #angle en degrès
+  ultrason3:
+    type: ultrason
+    x: -30 # position suivant x en mm
+    y: -50 # position suivant y en mm
+    theta: -190 #angle en degrès
 
-  # ultrason4:
-  #   type: ultrason
-  #   x: +30 # position suivant x en mm
-  #   y: -50 # position suivant y en mm
-  #   theta: 190 #angle en degrès
+  ultrason4:
+    type: ultrason
+    x: +30 # position suivant x en mm
+    y: -50 # position suivant y en mm
+    theta: 190 #angle en degrès
 
-  # ultrason5:
-  #   type: ultrason
-  #   x: 160 # position suivant x en mm
-  #   y: 0 # position suivant y en mm
-  #   theta: -90 #angle en degrès
+  ultrason5:
+    type: ultrason
+    x: 160 # position suivant x en mm
+    y: 0 # position suivant y en mm
+    theta: -90 #angle en degrès
