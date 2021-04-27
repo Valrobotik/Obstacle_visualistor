@@ -49,7 +49,7 @@ def init_plot(ax, point_robot, dist_sensors):
 
 # Variable à incrementer pour simuler les capteurs
 index = 0
-def update_data(dist_sensors):
+def update_data_simu(dist_sensors):
     """Fonction pour mettre à jour les postions des obstacle, des capteurs, etc...
     Pour la simulation on chosisi un obstacle qui varie d'une distance sinusoïdal
     Args:
@@ -111,7 +111,11 @@ def update_plot(data2plot, dist_sensors):
 if __name__ == "__main__":
     ################
     # Definition de la carte de capteur
-    carte = CarteDetecteurObstacle(portserial = "COM8", bauderate = 9600)
+    portserial = "" # Si absence du port série, on passe en mode simulation avec des sinus pour les distances des capteurs
+    # portserial = "COM8"
+
+    if portserial != "":
+        carte = CarteDetecteurObstacle(portserial, bauderate=9600)
 
 
     ####################
@@ -127,8 +131,10 @@ if __name__ == "__main__":
 
     # Attention le plot ne se ferme pas avec la croix de la fenètre
     while True:
-        # update_data(dist_sensors)
-        update_data(dist_sensors, carte)
+        if portserial == "":
+            update_data_simu(dist_sensors)
+        else:
+            update_data(dist_sensors, carte)
         update_plot(data2plot, dist_sensors)
         ax.legend(loc='lower left', title="Distance (mm)")
         plt.pause(1.0/30) # 30 ips
