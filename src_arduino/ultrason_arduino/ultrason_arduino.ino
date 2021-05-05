@@ -1,6 +1,7 @@
 //www.elegoo.com
 //2016.12.08
 #include "Ultrasonic.h"
+#include "Adafruit_VL53L0X.h"
 
 #include "pin_configuration.h"
 #include "gcode_interpreter.h"
@@ -11,16 +12,33 @@
 int TimeOut = 1000 * 5.8; // 1 m de distance max
 
 // Changer le nombre de capteur et les ajouter dans la liste suivante
-#define NUMBER_SENSOR 2
-Ultrasonic sensor[NUMBER_SENSOR] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut), Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
+const int NUMBER_ULTRASON = 2;
+const int NUMBER_LASER = 1;
+Ultrasonic Usensor[NUMBER_ULTRASON] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut),
+                                       Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
+
+Adafruit_VL53L0X Lsensor = Adafruit_VL53L0X();
+
 
 
 // Début du programme de récupération des distances
-double distance[NUMBER_SENSOR] = {0.0 };
+const int number_sensor = NUMBER_ULTRASON + NUMBER_LASER;
+double distance[number_sensor] = {0.0};
 
 void setup() {
-   Serial.begin(9600);
-   delay(100);
+   Serial.begin(115200);
+   // wait until serial port opens for native USB devices
+   while (!Serial)
+   {
+      delay(1);
+   }
+
+   if (!Lsensor.begin())
+      {
+         Serial.println(F("Failed to boot VL53L0X"));
+         while (1)
+         ;
+      }
 }
 
 int x = 0;
@@ -29,20 +47,32 @@ bool stringComplete = false; // whether the string is complete
 
 void loop() {
    // Save sensor data in a table
-   distance[x] = sensor[x].Distance();
-   x = (x + 1) % NUMBER_SENSOR;
+   if (x < NUMBER_ULTRASON)
+   {
+      distance[x] = Usensor[x].Distance();
+   }
+   else if (x < NUMBER_ULTRASON + NUMBER_LASER)
+   {
+      VL53L0X_RangingMeasurementData_t measure;
+      Lsensor.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
+      if (measure.RangeStatus != 4)
+      {
+         distance[x] = measure.RangeMilliMeter;
+      }
+   }
+   x = (x + 1) % number_sensor;
 
    // Serial read
    if (stringComplete)
    {
-      print_gcode2serial(inputString, distance, NUMBER_SENSOR);
+      print_gcode2serial(inputString, distance, number_sensor);
       // clear the string:
       inputString = "";
       stringComplete = false;
       Serial.flush();
    }
    // Delay for all sensor
-   delay(1 / (NUMBER_SENSOR * FREQ));
+   delay(1 / (number_sensor * FREQ));
 }
 
 /*
