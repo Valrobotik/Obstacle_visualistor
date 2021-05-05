@@ -112,10 +112,11 @@ if __name__ == "__main__":
     ################
     # Definition de la carte de capteur
     portserial = "" # Si absence du port série, on passe en mode simulation avec des sinus pour les distances des capteurs
-    # portserial = "COM8"
+    portserial = "COM8"
+    bauderate = 115200
 
     if portserial != "":
-        carte = CarteDetecteurObstacle(portserial, bauderate=9600)
+        carte = CarteDetecteurObstacle(portserial, bauderate)
 
 
     ####################
