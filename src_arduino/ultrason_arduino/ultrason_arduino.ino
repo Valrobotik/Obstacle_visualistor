@@ -9,7 +9,7 @@
 #define FREQ 40 //Hz
 
 // TimeOut = Max.Distance(mm) * 5,88
-int TimeOut = 1000 * 5.8; // 1 m de distance max
+int TimeOut = 2000 * 5.8; // 1 m de distance max
 
 // Changer le nombre de capteur et les ajouter dans la liste suivante
 const int NUMBER_ULTRASON = 2;
