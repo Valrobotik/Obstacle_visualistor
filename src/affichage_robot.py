@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
     ####################
     #affichage
-    fig, ax = curvelinear_plot(700)
+    fig, ax = curvelinear_plot(1500)
 
     # Chargement des données capteurs et robot du fichier robot_config.yaml
     nom_fichier = './src/robot_config.yaml'
