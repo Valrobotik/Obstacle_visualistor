@@ -94,11 +94,11 @@ def update_plot(data2plot, robot, dist_sensors):
 # MAIN PROGRAM
 
 # Creation des points de la table
-fichier_table = './src/table_config.yaml'
+fichier_table = './table_config.yaml'
 point_table = get_table_point(fichier_table)
 
 # Creation des points capteurs et point robot
-fichier_robot = './src/robot_config.yaml'
+fichier_robot = './robot_config.yaml'
 point_robot, dist_sensors = data_robot_creator(fichier_robot)
 
 # creation de l'objet robot

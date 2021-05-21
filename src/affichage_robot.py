@@ -112,7 +112,7 @@ if __name__ == "__main__":
     ################
     # Definition de la carte de capteur
     portserial = "" # Si absence du port série, on passe en mode simulation avec des sinus pour les distances des capteurs
-    portserial = "COM8"
+    portserial = "COM6"
     bauderate = 115200
 
     if portserial != "":
@@ -121,10 +121,10 @@ if __name__ == "__main__":
 
     ####################
     #affichage
-    fig, ax = curvelinear_plot(1500)
+    fig, ax = curvelinear_plot(750)
 
     # Chargement des données capteurs et robot du fichier robot_config.yaml
-    nom_fichier = './src/robot_config.yaml'
+    nom_fichier = './robot_config.yaml'
     point_robot, dist_sensors = data_robot_creator(nom_fichier)
     
     #Liste contenant les objets à afficher
