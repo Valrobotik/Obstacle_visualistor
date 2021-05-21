@@ -31,10 +31,14 @@ class CarteDetecteurObstacle(CommunicationGcode):
             # print(message)
 
             if message[0] != '':
-                if capteur == "A":
-                    return np.array(message, dtype=float)
-                else:
-                    return float(message[0])
+                try:
+                    if capteur == "A":
+                        return np.array(message, dtype=float)
+                    else:
+                        return float(message[0])
+
+                except ValueError:
+                    return None
 
             return None
 
