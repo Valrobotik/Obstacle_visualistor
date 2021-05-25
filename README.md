@@ -181,7 +181,7 @@ De cette manière l'affichage affiche les données mesurées en temps réel par 
 
 
 <p align="center">
-<img width="10%" src="images\logo_valrob.png" alt="Logo Valrob">
+<img width="10%" src="https://avatars.githubusercontent.com/u/39584742?v=4" alt="Logo Valrob">
 </p>
 
 
