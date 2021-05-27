@@ -34,8 +34,19 @@ def serial_ports():
 
 if __name__ == '__main__':
     ports = serial_ports()
-    r = range(len(ports))
-    for nb, port in zip(r, ports):
-        print(nb, ".", port)
+    r = [str(_) for _ in range(len(ports))]
+    port_user = None
+
+    while(port_user not in r):
+
+        for nb, port in zip(r, ports):
+            print(nb, ".", port)
+        print("E . Exit")
+        
+        port_user = input("Entrer le port désiré : ")
+        if (port_user == "E"):
+            sys.exit()
+
+
     
-    port_user = input("Entrer le port désiré : ")
+    print("ok")
