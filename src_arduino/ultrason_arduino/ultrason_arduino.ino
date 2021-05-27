@@ -9,17 +9,15 @@
 int TimeOut = 2000 * 5.8; // 1 m de distance max
 
 // Changer le nombre de capteur et les ajouter dans la liste suivante
-const int NUMBER_SENSOR = 2;
-Ultrasonic Usensor[NUMBER_SENSOR] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut),
-                                       Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
-
+#define NUMBER_SENSOR 2
+Ultrasonic sensor[NUMBER_SENSOR] = {Ultrasonic(TRIG_PIN1, ECHO_PIN1, TimeOut), 
+                                    Ultrasonic(TRIG_PIN2, ECHO_PIN2, TimeOut)};
 
 
 // Début du programme de récupération des distances
-double distance[NUMBER_SENSOR] = {0.0};
+double distance[NUMBER_SENSOR] = {0.0 };
 
-void setup() 
-{
+void setup() {
    Serial.begin(115200);
 }
 
@@ -29,11 +27,7 @@ bool stringComplete = false; // whether the string is complete
 
 void loop() {
    // Save sensor data in a table
-   if (x < NUMBER_SENSOR)
-   {
-      distance[x] = Usensor[x].Distance();
-   }
-
+   distance[x] = sensor[x].Distance();
    x = (x + 1) % NUMBER_SENSOR;
 
    // Serial read
@@ -46,7 +40,7 @@ void loop() {
       Serial.flush();
    }
    // Delay for all sensor
-   delay(1 / (NUMBER_SENSOR * FREQ) );
+   delay(1 / (NUMBER_SENSOR * FREQ));
 }
 
 /*
