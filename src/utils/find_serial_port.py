@@ -31,22 +31,38 @@ def serial_ports():
             pass
     return result
 
+def user_select_port_loop():
+    """Boucle d'attente de l'utilisateur pour obtenir le port de la carte arduino
 
-if __name__ == '__main__':
+    Returns:
+        str: Port de la carte
+    """
     ports = serial_ports()
     r = [str(_) for _ in range(len(ports))]
     port_user = None
 
     while(port_user not in r):
 
+        print("--------------")
         for nb, port in zip(r, ports):
             print(nb, ".", port)
+
+        print("--------------")
+        print("A . Actualiser")
         print("E . Exit")
+        print("--------------")
         
         port_user = input("Entrer le port désiré : ")
         if (port_user == "E"):
             sys.exit()
+        
+        if (port_user == "A"):
+            ports = serial_ports()
+            r = [str(_) for _ in range(len(ports))]
+
+    return ports[int(port_user)]
 
 
-    
-    print("ok")
+
+if __name__ == '__main__':
+    print(user_select_port_loop())
