@@ -49,12 +49,16 @@ def user_select_port_loop():
 
         print("--------------")
         print("A . Actualiser")
+        print("S . Simulation")
         print("E . Exit")
         print("--------------")
         
         port_user = input("Entrer le port désiré : ")
         if (port_user == "E"):
             sys.exit()
+        
+        if (port_user == "S"):
+            return ""
         
         if (port_user == "A"):
             ports = serial_ports()
