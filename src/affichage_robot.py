@@ -109,10 +109,10 @@ def update_plot(data2plot, dist_sensors):
 
 
 if __name__ == "__main__":
+    from utils.find_serial_port import user_select_port_loop
     ################
     # Definition de la carte de capteur
-    portserial = "" # Si absence du port série, on passe en mode simulation avec des sinus pour les distances des capteurs
-    portserial = "COM6"
+    portserial = user_select_port_loop()
     bauderate = 115200
 
     if portserial != "":
