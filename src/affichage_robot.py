@@ -115,6 +115,7 @@ if __name__ == "__main__":
     portserial = user_select_port_loop()
     bauderate = 115200
 
+    print("CTRL + C pour tout fermer")
     if portserial != "":
         carte = CarteDetecteurObstacle(portserial, bauderate)
 
