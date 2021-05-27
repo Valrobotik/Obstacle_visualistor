@@ -1,11 +1,12 @@
 if __name__ == "__main__":
     # Pour executer le code en local et avoir les bon import
-    import sys, os
     sys.path.append(os.getcwd() + "\\src")
 
+import sys, os
 from utils.yaml_utils import yaml_data_import
 from robot_package.DistSenor import DistSensor
 import numpy as np
+import time
 
 def data_robot_creator(nom_fichier):
     """Fonction pour retourner les points du robot et les données des capteurs extrait de la configuration yaml
@@ -16,8 +17,14 @@ def data_robot_creator(nom_fichier):
     Returns:
         dict: dictionnaire contenant les configurations
     """
-    dict_data = yaml_data_import(nom_fichier)
-
+    try :
+        dict_data = yaml_data_import(nom_fichier)
+    except FileNotFoundError:
+        print("---------------------------------------------------------------------")
+        print("Fichier Introuvable.")
+        print("Vérifier que le fichier de configuration est dans le même répertoire.")
+        time.sleep(10)
+        sys.exit()
 
     dist_sensors = capteur_creator(dict_data.get('capteurs'))
     point_robot = robot_point_creator(dict_data.get('point_robot'))
