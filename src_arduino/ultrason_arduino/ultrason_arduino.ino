@@ -1,7 +1,4 @@
-//www.elegoo.com
-//2016.12.08
 #include "Ultrasonic.h"
-#include "Adafruit_VL53L0X.h"
 
 #include "pin_configuration.h"
 #include "gcode_interpreter.h"
