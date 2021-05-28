@@ -1,6 +1,7 @@
 import sys
 import glob
 import serial
+import serial.tools.list_ports
 
 
 def serial_ports():
@@ -37,8 +38,9 @@ def user_select_port_loop():
     Returns:
         str: Port de la carte
     """
-    ports = serial_ports()
-    r = [str(_) for _ in range(len(ports))]
+    liste_ports = serial.tools.list_ports.comports()
+    ports = [port[0] for port in sorted(liste_ports)]
+    r = [str(i) for i in range(len(ports))]
     port_user = None
 
     while(port_user not in r):
@@ -61,12 +63,13 @@ def user_select_port_loop():
             return ""
         
         if (port_user == "A"):
-            ports = serial_ports()
-            r = [str(_) for _ in range(len(ports))]
+            liste_ports = serial.tools.list_ports.comports()
+            ports = [port[0] for port in sorted(liste_ports)]
+            r = [str(i) for i in range(len(ports))]
 
     return ports[int(port_user)]
 
 
 
 if __name__ == '__main__':
-    print(user_select_port_loop())
+    user_select_port_loop()
