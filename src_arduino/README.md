@@ -6,12 +6,25 @@ Dans cette partie de code, on retrouve un script permettant de récupérer les d
 
 ## Sommaire
 
+  * [Présentation](#pr-sentation)
+  * [Sommaire](#sommaire)
+  * [Mise en route rapide](#mise-en-route-rapide)
+  * [Configuration](#configuration)
   * [Utilisation](#utilisation)
-  * [Gcode utilisé](#gcode-utilis-)
   * [Auteurs](#auteurs)
 
+## Mise en route rapide
 
-## Utilisation
+Ce code est déjà configuré pour deux capteurs ultrasons à connecter sur une arduino. 
+
+Voici le schéma de cablage : 
+<p align="center">
+<img width="75%" src=".\cablage\Exemple_cablage_ultrason.png" alt="Logo Valrob">
+</p>
+
+Une fois le câble et le code `ultrason_arduino.ino` téleversé sur la carte, passer directement à la section [Utilisation](#utilisation).
+
+## Configuration
 
 Queslques étapes sont nécessaires :
 1. Il faut définir dans le fichier `pin_configuration.h` les différents pins utilisés pour les capteurs. On propose la notation suivante :
@@ -44,9 +57,10 @@ double distance[NUMBER_SENSOR] = {0.0 };
 Lorsque l'utilisateur demande les distances, on lit seulement ce tableau qui contient les dernières valeurs mesurées.
 
 
-## Gcode utilisé
+## Utilisation
 
-J'utilise la norme suivante pour communiquer avec la carte :
+J'utilise la norme suivante pour communiquer avec la carte. Il suffit d'entrer ces commandes dans le port série pour obtenir la requète demandée.
+
 * `SA` pour demander toutes les distances de tous les capteurs. Il est alors retoruné les distances dans l'ordre des capteurs, séparées par un `;`. 
 Exemple de retour pour deux capteurs :
     ```
@@ -83,7 +97,7 @@ Exemple de retour pour deux capteurs :
 
 
 <p align="center">
-<img width="10%" src="./../images\logo_valrob.png" alt="Logo Valrob">
+<img width="10%" src="https://avatars.githubusercontent.com/u/39584742?v=4" alt="Logo Valrob">
 </p>
 
 
